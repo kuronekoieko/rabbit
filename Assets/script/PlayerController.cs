@@ -159,13 +159,13 @@ public class PlayerController : MonoBehaviour
         isJumpNow = false;
         isLaddering = true;
         PlayerAmination.ClimbTrigger();
-        Physics2D.gravity = new Vector3(0, 0, 0);
+        rigid2D.gravityScale = 0;
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         //はしごを抜けた瞬間に呼ばれる
-        Physics2D.gravity = new Vector3(0, -9.81f, 0);
+        rigid2D.gravityScale = 5;
         isLaddering = false;
     }
 
