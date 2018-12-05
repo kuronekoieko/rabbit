@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
 
     Rigidbody2D rigid2D;
-    float jumpYForce = 1100.0f;
+    float jumpYForce = 900.0f;
     float walkSpeed = 10.0f;
     Vector3 buttonDownPosition;
     Vector3 buttonPosition;
@@ -153,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        //はしごに入った瞬間に呼ばれる
         isJumpNow = false;
         isLaddering = true;
         PlayerAmination.ClimbTrigger();
@@ -161,12 +162,14 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+        //はしごを抜けた瞬間に呼ばれる
         Physics2D.gravity = new Vector3(0, -9.81f, 0);
         isLaddering = false;
     }
 
     void OnCollisionStay2D(Collision2D other)
     {
+        //タイルマップに接触してる間に呼ばれる
 
         isCollisionStay = true;
 
@@ -181,7 +184,6 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-
 
         isCollisionStay = false;
 
@@ -210,8 +212,10 @@ public class PlayerController : MonoBehaviour
 
         if (isCollisionSlug) return;
 
+
         isCollisionSlug = true;
-        rigid2D.AddForce(transform.up * jumpYForce);
+        rigid2D.AddForce(transform.up * jumpYForce*1.4f);
+        PlayerAmination.JumpTrigger();
     }
 
 

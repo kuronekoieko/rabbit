@@ -89,7 +89,7 @@ public class PlayerAmination : MonoBehaviour {
 
     public static bool IsAnimState(AnimState state)
     {
-        //今のアニのstatが、引数のアニメと同じならtrueを返す
+        //今のアニメのstartが、引数のアニメと同じならtrueを返す
         AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         bool isAnimThis = animatorStateInfo.IsName(state.ToString());
         return isAnimThis;
