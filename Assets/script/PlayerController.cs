@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     int keyX;
     int keyY;
     bool isCollisionSlug;
+    float seconds;
 
     // Use this for initialization
     void Start()
@@ -248,9 +249,8 @@ public class PlayerController : MonoBehaviour
         flickVector = buttonPosition - buttonDownPosition;
         //flickVector = new Vector3(0, flickVector.y, flickVector.z);
 
-        //上方向にフリックされていた場合にはジャンプさせる
-        sin = flickVector.y / flickVector.magnitude;
-        //if (sin > 0.71) FlickJump();
+        //タップしている間の時間を計測
+        seconds += Time.deltaTime;
 
         //x方向の向きを見て、方向を判定する
         if (flickVector.x > 0)
@@ -281,6 +281,7 @@ public class PlayerController : MonoBehaviour
         buttonPosition.Set(0, 0, 0);
         buttonDownPosition.Set(0, 0, 0);
         rigid2D.velocity = new Vector2(0, rigid2D.velocity.y);
+        seconds = 0;
     }
 
 
@@ -303,7 +304,7 @@ public class PlayerController : MonoBehaviour
         float distance2 = Mathf.Pow(tappingVector.x, 2) + Mathf.Pow(tappingVector.y, 2) + Mathf.Pow(tappingVector.z, 2);
         float distance = Mathf.Sqrt(distance2);
 
-        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump) {
+        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump && seconds < 0.2f) {
             rigid2D.AddForce(transform.up * jumpYForce);
             isAbleToJump = false;
             isJumpNow = true;
