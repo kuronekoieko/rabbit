@@ -12,9 +12,10 @@ public class PlayerController : MonoBehaviour
     float walkSpeed = 10.0f;
     Vector3 buttonDownPosition;
     Vector3 buttonPosition;
+    Vector3 buttonRereasePosition;
+    Vector3 flickVector;
     int key;
     public static Animator animator;
-    Vector3 flickVector;
     float nearyZero = 0.1f;//1E-04
     float v1;
     float v2;
@@ -232,7 +233,7 @@ public class PlayerController : MonoBehaviour
         //タッチ中の動作
         if (Input.GetMouseButton(0)) FlickMotion();
 
-        //タップを離したときに初期化する
+        //タップを離したときに処理
         if (Input.GetMouseButtonUp(0)) FlickEnd();
 
     }
@@ -249,8 +250,7 @@ public class PlayerController : MonoBehaviour
 
         //上方向にフリックされていた場合にはジャンプさせる
         sin = flickVector.y / flickVector.magnitude;
-
-        if (sin > 0.71) Jump();
+        //if (sin > 0.71) FlickJump();
 
         //x方向の向きを見て、方向を判定する
         if (flickVector.x > 0)
@@ -272,6 +272,10 @@ public class PlayerController : MonoBehaviour
 
     void FlickEnd()
     {
+        //タップを離したときのジャンプ
+        TappingJump();
+
+        //以下初期化
         isMouseRerease = true;
         key = 0;
         buttonPosition.Set(0, 0, 0);
@@ -280,25 +284,32 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-
-    void Jump()
+    void FlickJump()
     {
-
         //ジャンプ動作
-
         if (Mathf.Abs(a) < nearyZero && IsNotJump() && isAbleToJump)
         {
             rigid2D.AddForce(transform.up * jumpYForce);
             isAbleToJump = false;
             isJumpNow = true;
-
         }
-
-
-
-
     }
+
+    void TappingJump()
+    {
+        buttonRereasePosition = Input.mousePosition;
+        Vector3 tappingVector = buttonRereasePosition - buttonDownPosition;
+
+        float distance2 = Mathf.Pow(tappingVector.x, 2) + Mathf.Pow(tappingVector.y, 2) + Mathf.Pow(tappingVector.z, 2);
+        float distance = Mathf.Sqrt(distance2);
+
+        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump) {
+            rigid2D.AddForce(transform.up * jumpYForce);
+            isAbleToJump = false;
+            isJumpNow = true;
+        }
+    }
+
 
     void Walk()
     {
