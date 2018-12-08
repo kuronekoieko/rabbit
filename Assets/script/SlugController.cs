@@ -58,9 +58,6 @@ public class SlugController : MonoBehaviour
         //if (collision.gameObject.tag.Equals("playerFoot")) Death();
         if (collision.gameObject.tag.Equals("Player")) Death();
 
-
-
-
     }
 
 

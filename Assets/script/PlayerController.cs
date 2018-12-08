@@ -35,20 +35,14 @@ public class PlayerController : MonoBehaviour
     bool isCollisionSlug;
     float seconds;
 
-    // Use this for initialization
     void Start()
     {
         rigid2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
     }
 
-
-
-    // Update is called once per frame
     void Update()
     {
-
 
         //加速度計測
         Accelalation();
@@ -96,12 +90,9 @@ public class PlayerController : MonoBehaviour
             buttonDownPosition = Input.mousePosition;
         }
 
-
-
         //タッチ中の動作
         if (Input.GetMouseButton(0))
         {
-
 
             //はしごの移動
             buttonPosition = Input.mousePosition;
@@ -203,7 +194,7 @@ public class PlayerController : MonoBehaviour
             isCollisionStay = true;
         }
 
-
+        Debug.Log(collision.gameObject.tag);
         //slugに衝突したときの動作
         if (collision.gameObject.tag.Equals("slug")) CollisionSlug();
 
@@ -213,7 +204,6 @@ public class PlayerController : MonoBehaviour
     {
 
         if (isCollisionSlug) return;
-
 
         isCollisionSlug = true;
         rigid2D.AddForce(transform.up * jumpYForce*1.4f);

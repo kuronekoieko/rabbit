@@ -84,7 +84,7 @@ public class PlayerAmination : MonoBehaviour {
     {
         string param = animTrigger.ToString();
         animator.SetTrigger(param);
-        Debug.Log(param);
+        //Debug.Log(param);
     }
 
     public static bool IsAnimState(AnimState state)
