@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
             isCollisionStay = true;
         }
 
-        Debug.Log(collision.gameObject.tag);
+        //Debug.Log(collision.gameObject.tag);
         //slugに衝突したときの動作
         if (collision.gameObject.tag.Equals("slug")) CollisionSlug();
 
