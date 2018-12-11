@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugController : MonoBehaviour 
+public class SlugController : MonoBehaviour
 {
 
     Rigidbody2D rigid2D;
@@ -14,23 +14,32 @@ public class SlugController : MonoBehaviour
     bool isDead;
     CircleCollider2D circleCollider2D;
     float r = 2.0f;
-   
+
+    string Player = "Player";
+    string slugLR = "slugLR";
+    string slugHead = "slugHead";
+    string playerFoot = "playerFoot";
 
 
-    void Start () {
+
+
+    void Start()
+    {
         rigid2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         circleCollider2D = GetComponent<CircleCollider2D>();
-       
+
     }
-	
-	void Update () {
+
+    void Update()
+    {
 
         if (!isDead) Walk();
 
     }
 
-    void Walk(){
+    void Walk()
+    {
         //タイマーで周期的に反転させる
         seconds += Time.deltaTime;
         //Debug.Log(seconds);
@@ -56,12 +65,25 @@ public class SlugController : MonoBehaviour
 
         //衝突を検知したのが"player"なら死ぬ
         //if (collision.gameObject.tag.Equals("playerFoot")) Death();
-        if (collision.gameObject.tag.Equals("Player")) Death();
+        //if (collision.gameObject.tag.Equals(playerFoot)) Death();
+
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //Debug.Log("test");
+
+        //if (other.gameObject.tag.Equals(slugLR)) Debug.Log(slugLR);
+        //if (other.gameObject.tag.Equals(slugHead)) Debug.Log(slugHead);
+        //if (other.gameObject.tag.Equals(Player)) Debug.Log(Player);
+        if (other.gameObject.tag.Equals(playerFoot)) Death();
 
     }
 
 
-    void Death(){
+
+    void Death()
+    {
         //一度衝突を検知していたら何もしない
         if (isDead) return;
 
