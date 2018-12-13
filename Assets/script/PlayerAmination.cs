@@ -2,32 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAmination : MonoBehaviour {
-
+public class PlayerAmination : MonoBehaviour
+{
+    //アニメーションのトリガー名
     public static string JumpTrigger = "JumpTrigger";
     public static string SkipTrigger = "SkipTrigger";
     public static string IdleTrigger = "IdleTrigger";
     public static string FallTrigger = "FallTrigger";
     public static string ClimbTrigger = "ClimbTrigger";
+    public static string HurtTrigger = "HurtTrigger";
 
+    //アニメーションのステート名
     public static string idle = "idle";
     public static string climb = "climb";
     public static string fall = "fall";
     public static string jump = "jump";
     public static string skip = "skip";
+    public static string hurt = "hurt";
 
     static Animator animator = PlayerController.animator;
-    GameObject player;
-    
+
     void Start()
     {
-        player = GetComponent<GameObject>();
-    }
-	
-	
-    void Update () {
 
-	}
+    }
+
+
+    void Update()
+    {
+
+    }
 
 
     public static void JumpAnim()
@@ -72,9 +76,11 @@ public class PlayerAmination : MonoBehaviour {
         //Debug.Log(parameters);
     }
 
-    public static void Animation(string animTrigger)
+    public static void HurtAnim()
     {
-        animator.SetTrigger(animTrigger);
+        // 連続再生で止まってるように見えるのをを防ぐ
+        if (IsAnimState(hurt)) return;
+        animator.SetTrigger(HurtTrigger);
     }
 
     public static bool IsAnimState(string state)

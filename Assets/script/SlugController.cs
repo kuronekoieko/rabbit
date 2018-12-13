@@ -13,6 +13,7 @@ public class SlugController : MonoBehaviour
     float seconds;
     bool isDead;
     CircleCollider2D circleCollider2D;
+    BoxCollider2D boxCollider2D;
     float r = 2.0f;
 
     string Player = "Player";
@@ -28,7 +29,8 @@ public class SlugController : MonoBehaviour
         rigid2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         circleCollider2D = GetComponent<CircleCollider2D>();
-
+        boxCollider2D = GetComponent<BoxCollider2D>();
+        Debug.Log(boxCollider2D.tag.Equals(slugLR));
     }
 
     void Update()
@@ -65,7 +67,7 @@ public class SlugController : MonoBehaviour
         if (other.gameObject.tag.Equals(playerFoot)) Death();
     }
 
-    void Death()
+    public void Death()
     {
         //一度衝突を検知していたら何もしない
         if (isDead) return;

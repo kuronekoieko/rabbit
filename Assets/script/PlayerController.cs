@@ -164,6 +164,10 @@ public class PlayerController : MonoBehaviour
 
         //slugに衝突したときの動作
         if (other.gameObject.tag.Equals(slugHead)) CollisionSlug();
+        if (other.gameObject.tag.Equals(slugLR)) {
+            PlayerAmination.HurtAnim();
+            //Debug.Log("test");
+        }
 
     }
 
