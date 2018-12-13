@@ -62,11 +62,11 @@ public class PlayerController : MonoBehaviour
         //ジャンプアニメーション
         if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow)
         {
-            PlayerAmination.JumpTrigger();
+            PlayerAmination.JumpAnim();
         }
 
         //落下時アニメーション
-        if (!isLaddering && rigid2D.velocity.y < -2) PlayerAmination.FallTrigger();
+        if (!isLaddering && rigid2D.velocity.y < -2) PlayerAmination.FallAnim();
 
 
         //フリック時の動作
@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
             //はしごに入った瞬間に呼ばれる
             isJumpNow = false;
             isLaddering = true;
-            PlayerAmination.ClimbTrigger();
+            PlayerAmination.ClimbAnim();
             rigid2D.gravityScale = 0;
         }
 
@@ -193,10 +193,10 @@ public class PlayerController : MonoBehaviour
             isCollisionStay = true;
 
             //止まったらidle
-            if (key == 0) PlayerAmination.IdleTrigger();
+            if (key == 0) PlayerAmination.IdleAnim();
 
             //スキップアニメーション
-            if (!isLaddering && key != 0) PlayerAmination.SkipTrigger();
+            if (!isLaddering && key != 0) PlayerAmination.SkipAnim();
         }
 
 
@@ -227,7 +227,7 @@ public class PlayerController : MonoBehaviour
 
         isCollisionSlug = true;
         rigid2D.AddForce(transform.up * jumpYForce * 2.0f);
-        PlayerAmination.JumpTrigger();
+        PlayerAmination.JumpAnim();
     }
 
 
