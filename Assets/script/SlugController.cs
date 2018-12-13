@@ -59,14 +59,10 @@ public class SlugController : MonoBehaviour
         transform.localScale = new Vector2(x, y);
     }
 
-
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D other)
     {
-
-        //衝突を検知したのが"player"なら死ぬ
-        //if (collision.gameObject.tag.Equals("playerFoot")) Death();
-        //if (collision.gameObject.tag.Equals(playerFoot)) Death();
-
+        //衝突を検知したのが"playerFoot"なら死ぬ
+        if (other.gameObject.tag.Equals(playerFoot)) Death();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -79,8 +75,6 @@ public class SlugController : MonoBehaviour
         if (other.gameObject.tag.Equals(playerFoot)) Death();
 
     }
-
-
 
     void Death()
     {
