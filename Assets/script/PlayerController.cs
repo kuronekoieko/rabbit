@@ -35,6 +35,12 @@ public class PlayerController : MonoBehaviour
     bool isCollisionSlug;
     float seconds;
 
+    string ladder = "ladder";
+    string slug = "slug";
+    string Tilemap = "Tilemap";
+    string slugLR = "slugLR";
+    string slugHead = "slugHead";
+
     void Start()
     {
         rigid2D = GetComponent<Rigidbody2D>();
@@ -146,31 +152,53 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //はしごに入った瞬間に呼ばれる
-        isJumpNow = false;
-        isLaddering = true;
-        PlayerAmination.ClimbTrigger();
-        rigid2D.gravityScale = 0;
+
+        if (other.gameObject.tag.Equals(ladder))
+        {
+            //はしごに入った瞬間に呼ばれる
+            isJumpNow = false;
+            isLaddering = true;
+            PlayerAmination.ClimbTrigger();
+            rigid2D.gravityScale = 0;
+        }
+
+        //slugに衝突したときの動作
+        if (other.gameObject.tag.Equals(slugHead)) CollisionSlug();
+
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        //はしごを抜けた瞬間に呼ばれる
-        rigid2D.gravityScale = 5;
-        isLaddering = false;
+        if (other.gameObject.tag.Equals(ladder))
+        {
+            //はしごを抜けた瞬間に呼ばれる
+            rigid2D.gravityScale = 5;
+            isLaddering = false;
+        }
+
+        if (other.gameObject.tag.Equals(slugHead))
+        {
+            isCollisionStay = false;
+
+            //slugから離れたときの処理
+            isCollisionSlug &= !other.gameObject.tag.Equals(slug);
+        }
+
     }
 
     void OnCollisionStay2D(Collision2D other)
     {
         //タイルマップに接触してる間に呼ばれる
+        if (other.gameObject.name.Equals(Tilemap)) {
+            isCollisionStay = true;
 
-        isCollisionStay = true;
+            //止まったらidle
+            if (key == 0) PlayerAmination.IdleTrigger();
 
-        //止まったらidle
-        if (key == 0) PlayerAmination.IdleTrigger();
+            //スキップアニメーション
+            if (!isLaddering && key != 0) PlayerAmination.SkipTrigger();
+        }
 
-        //スキップアニメーション
-        if (!isLaddering && key != 0) PlayerAmination.SkipTrigger();
 
     }
 
@@ -178,26 +206,18 @@ public class PlayerController : MonoBehaviour
     void OnCollisionExit2D(Collision2D collision)
     {
 
-        isCollisionStay = false;
 
-        //slugから離れたときの処理
-        isCollisionSlug &= !collision.gameObject.tag.Equals("slug");
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
 
         //Tilemapに衝突したときの処理
-        if (collision.gameObject.name.Equals("Tilemap"))
+        if (collision.gameObject.name.Equals(Tilemap))
         {
             isJumpNow = false;
             isCollisionStay = true;
         }
-
-        //Debug.Log(collision.gameObject.tag);
-        //slugに衝突したときの動作
-        if (collision.gameObject.tag.Equals("slug")) CollisionSlug();
-
     }
 
     void CollisionSlug()
@@ -206,7 +226,7 @@ public class PlayerController : MonoBehaviour
         if (isCollisionSlug) return;
 
         isCollisionSlug = true;
-        rigid2D.AddForce(transform.up * jumpYForce*1.4f);
+        rigid2D.AddForce(transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpTrigger();
     }
 
@@ -294,7 +314,8 @@ public class PlayerController : MonoBehaviour
         float distance2 = Mathf.Pow(tappingVector.x, 2) + Mathf.Pow(tappingVector.y, 2) + Mathf.Pow(tappingVector.z, 2);
         float distance = Mathf.Sqrt(distance2);
 
-        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump && seconds < 0.2f) {
+        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump && seconds < 0.2f)
+        {
             rigid2D.AddForce(transform.up * jumpYForce);
             isAbleToJump = false;
             isJumpNow = true;
