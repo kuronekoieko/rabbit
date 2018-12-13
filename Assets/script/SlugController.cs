@@ -66,16 +66,9 @@ public class SlugController : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other)
-    {
-        //Debug.Log("test");
-
-        //if (other.gameObject.tag.Equals(slugLR)) Debug.Log(slugLR);
-        //if (other.gameObject.tag.Equals(slugHead)) Debug.Log(slugHead);
-        //if (other.gameObject.tag.Equals(Player)) Debug.Log(Player);
+    {    
         if (other.gameObject.tag.Equals(playerFoot)) Death();
-
     }
-
     void Death()
     {
         //一度衝突を検知していたら何もしない
