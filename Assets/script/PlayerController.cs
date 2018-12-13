@@ -218,7 +218,6 @@ public class PlayerController : MonoBehaviour
             isJumpNow = false;
             isCollisionStay = true;
         }
-
     }
 
     void CollisionSlug()
