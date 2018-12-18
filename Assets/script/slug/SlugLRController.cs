@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugHeadController : MonoBehaviour {
+public class SlugLRController : MonoBehaviour {
 
     string playerFoot = "playerFoot";
-    SlugController slugController;
-
+    string player = "player";
 
     void Start () {
-        slugController = new SlugController();
-    }
+		
+	}
 	
 	void Update () {
 		
@@ -20,8 +19,8 @@ public class SlugHeadController : MonoBehaviour {
     {
         //衝突を検知したのが"playerFoot"なら死ぬ
         //if (other.gameObject.tag.Equals(playerFoot)) slugController.Death();
+        if (other.gameObject.tag.Equals(player)) Debug.Log("slugLR");
     }
-
 
 
 

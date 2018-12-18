@@ -7,39 +7,40 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
 
-    Rigidbody2D rigid2D;
-    float jumpYForce = 900.0f;
-    float walkSpeed = 10.0f;
-    Vector3 buttonDownPosition;
-    Vector3 buttonPosition;
-    Vector3 buttonRereasePosition;
-    Vector3 flickVector;
-    int key;
+    public static Rigidbody2D rigid2D;
+    public static float jumpYForce = 900.0f;
+    public static float walkSpeed = 10.0f;
+    public static Vector3 buttonDownPosition;
+    public static Vector3 buttonPosition;
+    public static Vector3 buttonRereasePosition;
+    public static Vector3 flickVector;
+    public static int key;
     public static Animator animator;
-    float nearyZero = 0.1f;//1E-04
-    float v1;
-    float v2;
-    float a;
-    int count;
-    float sin;
-    bool isMouseRerease = true;
-    public Vector2 playerPosition;
-    AnimatorStateInfo stateInfo;
-    bool isAbleToJump;
-    bool isCollisionStay;
-    bool isJumpNow;
-    bool isLaddering;
-    float ladderingSpeed = 3.0f;
-    int keyX;
-    int keyY;
-    bool isCollisionSlug;
-    float seconds;
+    public static float nearyZero = 0.1f;
+    public static float v1;
+    public static float v2;
+    public static float a;
+    public static int count;
+    public static float sin;
+    public static bool isMouseRerease = true;
+    public static Vector2 playerPosition;
+    public static AnimatorStateInfo stateInfo;
+    public static bool isAbleToJump;
+    public static bool isCollisionStay;
+    public static bool isJumpNow;
+    public static bool isLaddering;
+    public static float ladderingSpeed = 3.0f;
+    public static int keyX;
+    public static int keyY;
+    public static bool isCollisionSlug;
+    public static float seconds;
 
-    string ladder = "ladder";
-    string slug = "slug";
-    string Tilemap = "Tilemap";
-    string slugLR = "slugLR";
-    string slugHead = "slugHead";
+    public static string ladder = "ladder";
+    public static string slug = "slug";
+    public static string Tilemap = "Tilemap";
+    public static string slugLR = "slugLR";
+    public static string slugHead = "slugHead";
+
 
     void Start()
     {
@@ -87,7 +88,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void FlickLaddering()
+    public static void FlickLaddering()
     {
         //タッチした瞬間の動作
         if (Input.GetMouseButtonDown(0))
@@ -162,13 +163,6 @@ public class PlayerController : MonoBehaviour
             rigid2D.gravityScale = 0;
         }
 
-        //slugに衝突したときの動作
-        if (other.gameObject.tag.Equals(slugHead)) CollisionSlug();
-        if (other.gameObject.tag.Equals(slugLR)) {
-            PlayerAmination.HurtAnim();
-            //Debug.Log("test");
-        }
-
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -224,19 +218,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CollisionSlug()
+    public static void CollisionSlug()
     {
-
+        Debug.Log(slugHead);
         if (isCollisionSlug) return;
 
         isCollisionSlug = true;
-        rigid2D.AddForce(transform.up * jumpYForce * 2.0f);
+        rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpAnim();
     }
 
 
     //画面をタップしてから離すまでのフロー
-    void Flick()
+    public static void Flick()
     {
 
         //タップした始点と、今タップしてる点のベクトルを取得
@@ -254,7 +248,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void FlickMotion()
+    public static void FlickMotion()
     {
 
         buttonPosition = Input.mousePosition;
@@ -284,7 +278,7 @@ public class PlayerController : MonoBehaviour
         Walk();
     }
 
-    void FlickEnd()
+    public static void FlickEnd()
     {
         //タップを離したときのジャンプ
         TappingJump();
@@ -299,18 +293,18 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void FlickJump()
+    public static void FlickJump()
     {
         //ジャンプ動作
         if (Mathf.Abs(a) < nearyZero && IsNotJump() && isAbleToJump)
         {
-            rigid2D.AddForce(transform.up * jumpYForce);
+            rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
             isAbleToJump = false;
             isJumpNow = true;
         }
     }
 
-    void TappingJump()
+    public static void TappingJump()
     {
         buttonRereasePosition = Input.mousePosition;
         Vector3 tappingVector = buttonRereasePosition - buttonDownPosition;
@@ -320,27 +314,27 @@ public class PlayerController : MonoBehaviour
 
         if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump && seconds < 0.2f)
         {
-            rigid2D.AddForce(transform.up * jumpYForce);
+            rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
             isAbleToJump = false;
             isJumpNow = true;
         }
     }
 
 
-    void Walk()
+    public static void Walk()
     {
 
         //歩いてるときは等速で移動
         rigid2D.velocity = new Vector2(walkSpeed * key, rigid2D.velocity.y);
 
-        float x = Mathf.Abs(transform.localScale.x) * key;
-        float y = transform.localScale.y;
-        if (key != 0) transform.localScale = new Vector2(x, y);
+        float x = Mathf.Abs(rigid2D.transform.localScale.x) * key;
+        float y = rigid2D.transform.localScale.y;
+        if (key != 0) rigid2D.transform.localScale = new Vector2(x, y);
 
     }
 
 
-    void JumpCounter()
+    public static void JumpCounter()
     {
 
         //着地時count=1
@@ -356,19 +350,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    bool IsNotJump()
+    public static bool IsNotJump()
     {
         return Mathf.Abs(rigid2D.velocity.y) < nearyZero;
     }
 
-    bool IsStateEquals(string clip)
+    public static bool IsStateEquals(string clip)
     {
         stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         //Debug.Log(stateInfo.IsName(clip));
         return stateInfo.IsName(clip);
     }
 
-    void Accelalation()
+    public static void Accelalation()
     {
         //現在の速度を取得
         v2 = rigid2D.velocity.y;
