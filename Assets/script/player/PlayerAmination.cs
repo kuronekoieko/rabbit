@@ -20,7 +20,7 @@ public class PlayerAmination : MonoBehaviour
     public static string skip = "skip";
     public static string hurt = "hurt";
 
-    static Animator animator = PlayerController.animator;
+    public static Animator animator = PlayerController.animator;
 
     void Start()
     {

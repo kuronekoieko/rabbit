@@ -6,17 +6,13 @@ using UnityEngine;
 public class PlayerFootController : MonoBehaviour
 {
 
-    public static string Player = "Player";
-    public static string slugLR = "slugLR";
     public static string slugHead = "slugHead";
-    public static string playerFoot = "playerFoot";
-
 
     void Start()
     {
 
     }
-    
+
     void Update()
     {
 
@@ -24,8 +20,8 @@ public class PlayerFootController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //衝突を検知したのが"slugHead"なら死なす
-        if (other.gameObject.tag.Equals(slugHead)) SlugController.Death();
+        //衝突を検知したのが"slugHead"なら破壊する
+        //if (other.gameObject.tag.Equals(slugHead)) SlugController.Death();
     }
 
 

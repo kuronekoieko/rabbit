@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     public static int keyY;
     public static bool isCollisionSlug;
     public static float seconds;
+    public static bool isHurting;
 
     public static string ladder = "ladder";
     public static string slug = "slug";
@@ -61,13 +62,12 @@ public class PlayerController : MonoBehaviour
         isAbleToJump |= (isCollisionStay && isMouseRerease);
 
         //ジャンプアニメーション
-        if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow)
-        {
-            PlayerAmination.JumpAnim();
-        }
+        //if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow) PlayerAmination.JumpAnim();
+
+        if (isHurting) PlayerAmination.HurtAnim();
 
         //落下時アニメーション
-        if (!isLaddering && rigid2D.velocity.y < -2) PlayerAmination.FallAnim();
+        //if (!isLaddering && rigid2D.velocity.y < -2) PlayerAmination.FallAnim();
 
 
         //フリック時の動作
@@ -187,7 +187,8 @@ public class PlayerController : MonoBehaviour
     void OnCollisionStay2D(Collision2D other)
     {
         //タイルマップに接触してる間に呼ばれる
-        if (other.gameObject.name.Equals(Tilemap)) {
+        if (other.gameObject.name.Equals(Tilemap))
+        {
             isCollisionStay = true;
 
             //止まったらidle
@@ -215,17 +216,29 @@ public class PlayerController : MonoBehaviour
         {
             isJumpNow = false;
             isCollisionStay = true;
+            isHurting = false;
         }
     }
 
     public static void CollisionSlug()
     {
-        Debug.Log(slugHead);
         if (isCollisionSlug) return;
 
         isCollisionSlug = true;
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpAnim();
+    }
+
+    public static void Hurt()
+    {
+
+        if (isHurting) return;
+        isHurting = true;
+
+        rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
+        //rigid2D.velocity = new Vector3(3.0f*-key,rigid2D.velocity.y,0);
+
+
     }
 
 

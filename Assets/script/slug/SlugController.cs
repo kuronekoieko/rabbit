@@ -18,7 +18,6 @@ public class SlugController : MonoBehaviour
     public static string Player = "Player";
     public static string slugLR = "slugLR";
     public static string slugHead = "slugHead";
-    public static string playerFoot = "playerFoot";
     public static MonoBehaviour monoBehaviour;
 
     void Start()
@@ -56,7 +55,7 @@ public class SlugController : MonoBehaviour
         rigid2D.transform.localScale = new Vector2(x, y);
     }
 
- 
+
     public static void Death()
     {
         //一度衝突を検知していたら何もしない
@@ -84,11 +83,11 @@ public class SlugController : MonoBehaviour
         {
             DeathAnimationTrigger("DeathTrigger");
         }));
-        
+
     }
 
-  
-    
+
+
     public static void DeathAnimationTrigger(string parameters)
     {
         animator.speed = 1.0f;
@@ -101,7 +100,7 @@ public class SlugController : MonoBehaviour
         }));
     }
 
-   public static IEnumerator DelayMethod(float waitTime, Action action)
+    public static IEnumerator DelayMethod(float waitTime, Action action)
     {
         yield return new WaitForSeconds(waitTime);
         action();
