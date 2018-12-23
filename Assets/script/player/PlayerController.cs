@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
     public static string ladder = "ladder";
     public static string slug = "slug";
     public static string Tilemap = "Tilemap";
-    public static string slugLR = "slugLR";
     public static string slugHead = "slugHead";
 
 
@@ -62,12 +61,13 @@ public class PlayerController : MonoBehaviour
         isAbleToJump |= (isCollisionStay && isMouseRerease);
 
         //ジャンプアニメーション
-        //if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow) PlayerAmination.JumpAnim();
+        if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow) PlayerAmination.JumpAnim();
 
+        //攻撃をうけたときのアニメーション
         if (isHurting) PlayerAmination.HurtAnim();
 
         //落下時アニメーション
-        //if (!isLaddering && rigid2D.velocity.y < -2) PlayerAmination.FallAnim();
+        if (!isLaddering && rigid2D.velocity.y < -2 && !isHurting) PlayerAmination.FallAnim();
 
 
         //フリック時の動作
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             //通常時
-            Flick();
+            if (!isHurting) Flick();
         }
 
         //落ちたら戻る
@@ -229,14 +229,15 @@ public class PlayerController : MonoBehaviour
         PlayerAmination.JumpAnim();
     }
 
-    public static void Hurt()
+    public static void Hurt(float hurtKey)
     {
 
         if (isHurting) return;
         isHurting = true;
 
+        rigid2D.velocity = new Vector3(0, 0, 0);
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-        //rigid2D.velocity = new Vector3(3.0f*-key,rigid2D.velocity.y,0);
+        rigid2D.velocity = new Vector3(3.0f * hurtKey, rigid2D.velocity.y, 0);
 
 
     }
@@ -336,6 +337,7 @@ public class PlayerController : MonoBehaviour
 
     public static void Walk()
     {
+        if (isHurting) return;
 
         //歩いてるときは等速で移動
         rigid2D.velocity = new Vector2(walkSpeed * key, rigid2D.velocity.y);

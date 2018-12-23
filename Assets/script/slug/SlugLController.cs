@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugLRController : MonoBehaviour
+public class SlugLController : MonoBehaviour
 {
 
     string playerSide = "playerSide";
@@ -20,7 +20,7 @@ public class SlugLRController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //衝突を検知したのが"playerLR"ならprayerに攻撃
-        if (other.gameObject.tag.Equals(playerSide)) PlayerController.Hurt();
+        if (other.gameObject.tag.Equals(playerSide)) PlayerController.Hurt(-1.0f);
     }
 
 
