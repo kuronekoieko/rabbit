@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public static bool isCollisionSlug;
     public static float seconds;
     public static bool isHurting;
+    public static float mHurtkey;
 
     public static string ladder = "ladder";
     public static string slug = "slug";
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
 
         //攻撃をうけたときのアニメーション
         if (isHurting) PlayerAmination.HurtAnim();
-
+       
         //落下時アニメーション
         if (!isLaddering && rigid2D.velocity.y < -2 && !isHurting) PlayerAmination.FallAnim();
 
@@ -229,7 +230,7 @@ public class PlayerController : MonoBehaviour
         PlayerAmination.JumpAnim();
     }
 
-    public static void Hurt(float hurtKey)
+    public static void Hurt()
     {
 
         if (isHurting) return;
@@ -237,8 +238,7 @@ public class PlayerController : MonoBehaviour
 
         rigid2D.velocity = new Vector3(0, 0, 0);
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-        rigid2D.velocity = new Vector3(3.0f * hurtKey, rigid2D.velocity.y, 0);
-
+        rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
     }
 
 
