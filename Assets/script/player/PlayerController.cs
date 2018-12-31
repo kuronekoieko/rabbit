@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             //通常時
             if (!isHurting) Flick();
+
         }
 
         //落ちたら戻る
@@ -205,7 +206,6 @@ public class PlayerController : MonoBehaviour
     void OnCollisionExit2D(Collision2D collision)
     {
 
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -214,9 +214,9 @@ public class PlayerController : MonoBehaviour
         //Tilemapに衝突したときの処理
         if (collision.gameObject.name.Equals(Tilemap))
         {
+            isHurting = false;
             isJumpNow = false;
             isCollisionStay = true;
-            isHurting = false;
         }
     }
 
@@ -239,7 +239,6 @@ public class PlayerController : MonoBehaviour
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
         rigid2D.velocity = new Vector3(3.0f * hurtKey, rigid2D.velocity.y, 0);
 
-
     }
 
 
@@ -253,6 +252,7 @@ public class PlayerController : MonoBehaviour
             isMouseRerease = false;
             buttonDownPosition = Input.mousePosition;
         }
+
         //タッチ中の動作
         if (Input.GetMouseButton(0)) FlickMotion();
 
@@ -269,7 +269,6 @@ public class PlayerController : MonoBehaviour
 
         //フリックしている向きのベクトルを取得
         flickVector = buttonPosition - buttonDownPosition;
-        //flickVector = new Vector3(0, flickVector.y, flickVector.z);
 
         //タップしている間の時間を計測
         seconds += Time.deltaTime;
