@@ -31,7 +31,6 @@ public class SlugController : MonoBehaviour
     void Update()
     {
         if (!isDead) Walk();
-        Debug.Log(rigid2D.transform.name);
     }
 
     public static void Walk()
