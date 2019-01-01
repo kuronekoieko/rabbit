@@ -22,6 +22,8 @@ public class PlayerFootController : MonoBehaviour
     {
         //衝突を検知したのが"slugHead"なら破壊する
         if (other.gameObject.tag.Equals(slugHead)) SlugController.Death();
+        //Debug.Log(other.gameObject.name);
+
     }
 
 
