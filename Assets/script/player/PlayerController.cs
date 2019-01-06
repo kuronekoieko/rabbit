@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     public static string Tilemap = "Tilemap";
     public static string slugHead = "slugHead";
 
+    //フレーム毎の処理====================================================================================================
 
     void Start()
     {
@@ -58,14 +59,8 @@ public class PlayerController : MonoBehaviour
         //接地判定
         GroundCheck();
 
-        //ジャンプアニメーション
-        if (rigid2D.velocity.y > 0.0f && !isGrounded && !isHurting && !isLaddering) PlayerAmination.JumpAnim();
-
-        //落下時アニメーション
-        if (rigid2D.velocity.y < -2 && !isGrounded && !isHurting && !isLaddering) PlayerAmination.FallAnim();
-
-        //攻撃をうけたときのアニメーション
-        if (isHurting) PlayerAmination.HurtAnim();
+        //アニメーションの切り替え
+        SwhichAnimation();
 
         //フリック時の動作
         if (isLaddering)
@@ -85,6 +80,75 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -50) SceneManager.LoadScene("Stage1");
 
     }
+
+    //コライダが呼ばれたときの処理========================================================================================================
+
+   
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (other.gameObject.tag.Equals(ladder))
+        {
+            //はしごに入った瞬間に呼ばれる
+            isJumpNow = false;
+            isLaddering = true;
+            PlayerAmination.ClimbAnim();
+            rigid2D.gravityScale = 0;
+        }
+
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag.Equals(ladder))
+        {
+            //はしごを抜けた瞬間に呼ばれる
+            rigid2D.gravityScale = 5;
+            isLaddering = false;
+        }
+
+        if (other.gameObject.tag.Equals(slugHead))
+        {
+            isCollisionStay = false;
+
+            //slugから離れたときの処理
+            isCollisionSlug &= !other.gameObject.tag.Equals(slug);
+        }
+
+    }
+
+    void OnCollisionStay2D(Collision2D other)
+    {
+        //タイルマップに接触してる間に呼ばれる
+        if (other.gameObject.name.Equals(Tilemap))
+        {
+            isCollisionStay = true;
+
+
+        }
+
+
+    }
+
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        //Tilemapに衝突したときの処理
+        if (collision.gameObject.name.Equals(Tilemap))
+        {
+            isHurting = false;
+            isJumpNow = false;
+            isCollisionStay = true;
+        }
+    }
+
+    //普通のメソッド==============================================================================================================
 
     public static void FlickLaddering()
     {
@@ -147,74 +211,6 @@ public class PlayerController : MonoBehaviour
             rigid2D.velocity = new Vector3(0, 0, 0);
         }
 
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-
-        if (other.gameObject.tag.Equals(ladder))
-        {
-            //はしごに入った瞬間に呼ばれる
-            isJumpNow = false;
-            isLaddering = true;
-            PlayerAmination.ClimbAnim();
-            rigid2D.gravityScale = 0;
-        }
-
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.gameObject.tag.Equals(ladder))
-        {
-            //はしごを抜けた瞬間に呼ばれる
-            rigid2D.gravityScale = 5;
-            isLaddering = false;
-        }
-
-        if (other.gameObject.tag.Equals(slugHead))
-        {
-            isCollisionStay = false;
-
-            //slugから離れたときの処理
-            isCollisionSlug &= !other.gameObject.tag.Equals(slug);
-        }
-
-    }
-
-    void OnCollisionStay2D(Collision2D other)
-    {
-        //タイルマップに接触してる間に呼ばれる
-        if (other.gameObject.name.Equals(Tilemap))
-        {
-            isCollisionStay = true;
-
-            //止まったらidle
-            if (key == 0) PlayerAmination.IdleAnim();
-
-            //スキップアニメーション
-            if (!isLaddering && key != 0) PlayerAmination.SkipAnim();
-        }
-
-
-    }
-
-
-    void OnCollisionExit2D(Collision2D collision)
-    {
-
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        //Tilemapに衝突したときの処理
-        if (collision.gameObject.name.Equals(Tilemap))
-        {
-            isHurting = false;
-            isJumpNow = false;
-            isCollisionStay = true;
-        }
     }
 
     public static void CollisionSlug()
@@ -369,6 +365,24 @@ public class PlayerController : MonoBehaviour
                 isGrounded = true;
             }
         }
+    }
+
+    protected void SwhichAnimation() {
+        //ジャンプアニメーション
+        if (rigid2D.velocity.y > 0.0f && !isGrounded && !isHurting && !isLaddering) PlayerAmination.JumpAnim();
+
+        //落下時アニメーション
+        if (rigid2D.velocity.y < -2 && !isGrounded && !isHurting && !isLaddering) PlayerAmination.FallAnim();
+
+        //攻撃をうけたときのアニメーション
+        if (isHurting) PlayerAmination.HurtAnim();
+
+        //idleアニメーション
+        if (key == 0 && isGrounded) PlayerAmination.IdleAnim();
+
+        //スキップアニメーション
+        if (!isLaddering && key != 0 && isGrounded) PlayerAmination.SkipAnim();
+
     }
 
 
