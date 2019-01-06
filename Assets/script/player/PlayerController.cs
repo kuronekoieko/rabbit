@@ -270,10 +270,9 @@ public class PlayerController : MonoBehaviour
     public static void Skip()
     {
         if (isHurting) return;
-
+        
         //歩いてるときは等速で移動
         rigid2D.velocity = new Vector2(walkSpeed * key, rigid2D.velocity.y);
-
         float x = Mathf.Abs(rigid2D.transform.localScale.x) * key;
         float y = rigid2D.transform.localScale.y;
         if (key != 0) rigid2D.transform.localScale = new Vector2(x, y);
