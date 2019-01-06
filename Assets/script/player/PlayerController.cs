@@ -17,15 +17,10 @@ public class PlayerController : MonoBehaviour
     public static int key;
     public static Animator animator;
     public static float nearyZero = 0.1f;
-    public static float v1;
-    public static float v2;
-    public static float a;
-    public static int count;
     public static float sin;
     public static bool isMouseRerease = true;
     public static Vector2 playerPosition;
     public static AnimatorStateInfo stateInfo;
-    public static bool isAbleToJump;
     public static bool isCollisionStay;
     public static bool isJumpNow;
     public static bool isLaddering;
@@ -37,6 +32,11 @@ public class PlayerController : MonoBehaviour
     public static bool isHurting;
     public static float mHurtkey;
 
+    public static Transform groundCheck_L;
+    public static Transform groundCheck_C;
+    public static Transform groundCheck_R;
+    public static bool isGrounded;
+
     public static string ladder = "ladder";
     public static string slug = "slug";
     public static string Tilemap = "Tilemap";
@@ -47,29 +47,25 @@ public class PlayerController : MonoBehaviour
     {
         rigid2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        groundCheck_L = transform.Find("groundCheck_L");
+        groundCheck_C = transform.Find("groundCheck_C");
+        groundCheck_R = transform.Find("groundCheck_R");
     }
 
     void Update()
     {
 
-        //加速度計測
-        Accelalation();
-
-        //ジャンプの状態を取得
-        JumpCounter();
-
-        //ジャンプできる様になる条件
-        isAbleToJump |= (isCollisionStay && isMouseRerease);
+        //接地判定
+        GroundCheck();
 
         //ジャンプアニメーション
-        if (a < nearyZero && rigid2D.velocity.y > 0 && isJumpNow) PlayerAmination.JumpAnim();
+        if (rigid2D.velocity.y > 0.0f && !isGrounded && !isHurting && !isLaddering) PlayerAmination.JumpAnim();
+
+        //落下時アニメーション
+        if (rigid2D.velocity.y < -2 && !isGrounded && !isHurting && !isLaddering) PlayerAmination.FallAnim();
 
         //攻撃をうけたときのアニメーション
         if (isHurting) PlayerAmination.HurtAnim();
-       
-        //落下時アニメーション
-        if (!isLaddering && rigid2D.velocity.y < -2 && !isHurting) PlayerAmination.FallAnim();
-
 
         //フリック時の動作
         if (isLaddering)
@@ -305,18 +301,6 @@ public class PlayerController : MonoBehaviour
         seconds = 0;
     }
 
-
-    public static void FlickJump()
-    {
-        //ジャンプ動作
-        if (Mathf.Abs(a) < nearyZero && IsNotJump() && isAbleToJump)
-        {
-            rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-            isAbleToJump = false;
-            isJumpNow = true;
-        }
-    }
-
     public static void TappingJump()
     {
         buttonRereasePosition = Input.mousePosition;
@@ -325,10 +309,11 @@ public class PlayerController : MonoBehaviour
         float distance2 = Mathf.Pow(tappingVector.x, 2) + Mathf.Pow(tappingVector.y, 2) + Mathf.Pow(tappingVector.z, 2);
         float distance = Mathf.Sqrt(distance2);
 
-        if (Mathf.Abs(distance) < 1.0f && IsNotJump() && isAbleToJump && seconds < 0.2f)
+        bool isTap = Mathf.Abs(distance) < 1.0f && seconds < 0.2f;
+
+        if (isTap && isGrounded && !isLaddering)
         {
             rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-            isAbleToJump = false;
             isJumpNow = true;
         }
     }
@@ -348,26 +333,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    public static void JumpCounter()
-    {
 
-        //着地時count=1
-        //ジャンプ時count=2
-        if (a > nearyZero)
-        {
-            count++;
-            if (count % 2 == 0)
-            {
-                //Debug.Log("ジャンプ時" + count);
-                count = 0;
-            }
-        }
-    }
-
-    public static bool IsNotJump()
-    {
-        return Mathf.Abs(rigid2D.velocity.y) < nearyZero;
-    }
 
     public static bool IsStateEquals(string clip)
     {
@@ -376,17 +342,33 @@ public class PlayerController : MonoBehaviour
         return stateInfo.IsName(clip);
     }
 
-    public static void Accelalation()
+    private void GroundCheck()
     {
-        //現在の速度を取得
-        v2 = rigid2D.velocity.y;
+        //初期化
+        isGrounded = false;
 
-        //加速度を計算
-        a = (v2 - v1) / Time.deltaTime;
+        //L、C、Rそれぞれが格納できる配列を定義
+        Collider2D[][] groundCheckCollider = new Collider2D[3][];
 
-        //現在の速度を、前のフレームの速度としてする
-        v1 = v2;
+        //L、C、Rそれぞれの検知したコライダの配列を格納
+        groundCheckCollider[0] = Physics2D.OverlapPointAll(groundCheck_L.position);
+        groundCheckCollider[1] = Physics2D.OverlapPointAll(groundCheck_C.position);
+        groundCheckCollider[2] = Physics2D.OverlapPointAll(groundCheck_R.position);
 
+        //groundCheckをL,C,Rで回す
+        foreach (Collider2D[] groundColliderList in groundCheckCollider)
+        {
+            //それぞれが検知したコライダを回す
+            foreach (Collider2D groundCollider in groundColliderList)
+            {
+                //nullチェック
+                if (!groundCollider) break;
+                //Triggerがオンになってるコライダは対象外
+                if (groundCollider.isTrigger) break;
+
+                isGrounded = true;
+            }
+        }
     }
 
 
