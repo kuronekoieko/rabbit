@@ -21,7 +21,9 @@ public class PlayerFootController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //衝突を検知したのが"slugHead"なら破壊する
-        if (other.gameObject.tag.Equals(slugHead)) SlugController.Death();
+        if (other.gameObject.tag.Equals(slugHead)) SlugController.Death(other.gameObject.transform.parent.gameObject);
+        //Debug.Log(other.gameObject.name);
+
     }
 
 

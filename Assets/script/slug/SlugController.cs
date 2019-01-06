@@ -6,37 +6,37 @@ using UnityEngine;
 public class SlugController : MonoBehaviour
 {
 
-    public static Rigidbody2D rigid2D;
     public static Animator animator;
     public static float walkingSpeed = 2.0f;
     public static int key = -1;
     public static float seconds;
-    public static bool isDead;
-    public static CircleCollider2D circleCollider2D;
     public static float r = 2.0f;
-
-    public static string Player = "Player";
-    public static string slugLR = "slugLR";
-    public static string slugHead = "slugHead";
     public static MonoBehaviour monoBehaviour;
+    public static GameObject mDeadSlug;
 
     void Start()
     {
-        rigid2D = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        circleCollider2D = GetComponent<CircleCollider2D>();
         monoBehaviour = this;
     }
 
     void Update()
     {
-
-        if (!isDead) Walk();
-
+        //nullチェック
+        if (!mDeadSlug)
+        {
+            Walk();
+        }
+        else
+        {
+            //死んだslugと今のslugがちがければ歩く
+            if (!gameObject.transform.name.Equals(mDeadSlug.transform.name)) Walk();
+        }
     }
 
-    public static void Walk()
+    public void Walk()
     {
+
+        Rigidbody2D rigid2D = GetComponent<Rigidbody2D>();
         //タイマーで周期的に反転させる
         seconds += Time.deltaTime;
 
@@ -56,13 +56,12 @@ public class SlugController : MonoBehaviour
     }
 
 
-    public static void Death()
+    public static void Death(GameObject deadSlug)
     {
-        //一度衝突を検知していたら何もしない
-        if (isDead) return;
-
-        //衝突したかどうか
-        isDead = true;
+        mDeadSlug = deadSlug;
+        Rigidbody2D rigid2D = deadSlug.GetComponent<Rigidbody2D>();
+        CircleCollider2D circleCollider2D = deadSlug.GetComponent<CircleCollider2D>();
+        animator = deadSlug.GetComponent<Animator>();
 
         //速度を止める
         rigid2D.velocity = new Vector3(0, 0, 0);
@@ -81,23 +80,24 @@ public class SlugController : MonoBehaviour
         //一秒後にdeathアニメーションを呼ぶ
         monoBehaviour.StartCoroutine(DelayMethod(0.8f, () =>
         {
-            DeathAnimationTrigger("DeathTrigger");
+            DeathAnimationTrigger(deadSlug);
         }));
 
     }
 
 
 
-    public static void DeathAnimationTrigger(string parameters)
+    public static void DeathAnimationTrigger(GameObject deadSlug)
     {
         animator.speed = 1.0f;
-        animator.SetTrigger(parameters);
+        animator.SetTrigger("DeathTrigger");
 
-        //一秒後にオブジェクトを破棄する
+        //数秒後に消す
         monoBehaviour.StartCoroutine(DelayMethod(0.8f, () =>
         {
-            Destroy(monoBehaviour.gameObject);
+            deadSlug.transform.localScale = new Vector3(0, 0, 0);
         }));
+
     }
 
     public static IEnumerator DelayMethod(float waitTime, Action action)
