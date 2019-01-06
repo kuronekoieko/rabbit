@@ -20,11 +20,11 @@ public class PlayerAmination : MonoBehaviour
     public static string skip = "skip";
     public static string hurt = "hurt";
 
-    public static Animator animator = PlayerController.animator;
+    public static Animator animator;
 
     void Start()
     {
-
+        animator = GetComponent<Animator>();
     }
 
 
