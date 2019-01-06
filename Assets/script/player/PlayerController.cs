@@ -17,20 +17,17 @@ public class PlayerController : MonoBehaviour
     public static int key;
     public static Animator animator;
     public static float nearyZero = 0.1f;
-    public static float sin;
     public static bool isMouseRerease = true;
     public static Vector2 playerPosition;
-    public static AnimatorStateInfo stateInfo;
-    public static bool isCollisionStay;
-    public static bool isJumpNow;
     public static bool isLaddering;
     public static float ladderingSpeed = 3.0f;
     public static int keyX;
     public static int keyY;
     public static bool isCollisionSlug;
-    public static float seconds;
+    public static float tappingTime;
     public static bool isHurting;
-    public static float mHurtkey;
+    protected static float defaultGravityScale;
+    public static float sin;
 
     public static Transform groundCheck_L;
     public static Transform groundCheck_C;
@@ -51,6 +48,7 @@ public class PlayerController : MonoBehaviour
         groundCheck_L = transform.Find("groundCheck_L");
         groundCheck_C = transform.Find("groundCheck_C");
         groundCheck_R = transform.Find("groundCheck_R");
+        defaultGravityScale = rigid2D.gravityScale;
     }
 
     void Update()
@@ -67,13 +65,11 @@ public class PlayerController : MonoBehaviour
         {
             //はしごを登ってるとき
             FlickLaddering();
-            animator.speed = keyX == 0 && keyY == 0 ? 0f : 1f;
         }
         else
         {
             //通常時
             if (!isHurting) Flick();
-
         }
 
         //落ちたら戻る
@@ -83,16 +79,14 @@ public class PlayerController : MonoBehaviour
 
     //コライダが呼ばれたときの処理========================================================================================================
 
-   
+
     void OnTriggerEnter2D(Collider2D other)
     {
 
         if (other.gameObject.tag.Equals(ladder))
         {
             //はしごに入った瞬間に呼ばれる
-            isJumpNow = false;
             isLaddering = true;
-            PlayerAmination.ClimbAnim();
             rigid2D.gravityScale = 0;
         }
 
@@ -103,14 +97,12 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag.Equals(ladder))
         {
             //はしごを抜けた瞬間に呼ばれる
-            rigid2D.gravityScale = 5;
+            rigid2D.gravityScale = defaultGravityScale;
             isLaddering = false;
         }
 
         if (other.gameObject.tag.Equals(slugHead))
         {
-            isCollisionStay = false;
-
             //slugから離れたときの処理
             isCollisionSlug &= !other.gameObject.tag.Equals(slug);
         }
@@ -119,39 +111,25 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other)
     {
-        //タイルマップに接触してる間に呼ばれる
-        if (other.gameObject.name.Equals(Tilemap))
-        {
-            isCollisionStay = true;
-
-
-        }
-
-
     }
-
 
     void OnCollisionExit2D(Collision2D collision)
     {
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
 
-        //Tilemapに衝突したときの処理
-        if (collision.gameObject.name.Equals(Tilemap))
-        {
-            isHurting = false;
-            isJumpNow = false;
-            isCollisionStay = true;
-        }
+        //Tilemapに衝突したときのに、ダメージを解除する
+        isHurting &= !collision.gameObject.name.Equals(Tilemap);
     }
 
     //普通のメソッド==============================================================================================================
 
     public static void FlickLaddering()
     {
+        animator.speed = keyX == 0 && keyY == 0 ? 0f : 1f;
+
         //タッチした瞬間の動作
         if (Input.GetMouseButtonDown(0))
         {
@@ -169,28 +147,13 @@ public class PlayerController : MonoBehaviour
             //フリックしている向きのベクトルを取得
             flickVector = buttonPosition - buttonDownPosition;
 
-
             //x方向の向きを見て、方向を判定する
-            if (flickVector.x > 0)
-            {
-                keyX = 1;
-            }
-            else if (flickVector.x < 0)
-            {
-                keyX = -1;
-            }
-
+            if (flickVector.x > 0) keyX = 1;
+            if (flickVector.x < 0) keyX = -1;
 
             //y方向の向きを見て、方向を判定する
-            if (flickVector.y > 0)
-            {
-                keyY = 1;
-            }
-            else if (flickVector.y < 0)
-            {
-                keyY = -1;
-            }
-
+            if (flickVector.y > 0) keyY = 1;
+            if (flickVector.y < 0) keyY = -1;
 
             sin = flickVector.y / flickVector.magnitude;
 
@@ -198,7 +161,6 @@ public class PlayerController : MonoBehaviour
             float y = keyY * ladderingSpeed;
 
             rigid2D.velocity = Mathf.Abs(sin) > 0.71f ? new Vector2(0, y) : new Vector2(x, 0);
-
         }
 
         //タッチを離したときの処理
@@ -263,30 +225,21 @@ public class PlayerController : MonoBehaviour
         flickVector = buttonPosition - buttonDownPosition;
 
         //タップしている間の時間を計測
-        seconds += Time.deltaTime;
+        tappingTime += Time.deltaTime;
 
         //x方向の向きを見て、方向を判定する
-        if (flickVector.x > 0)
-        {
-            key = 1;
-        }
-        else if (flickVector.x < 0)
-        {
-            key = -1;
-        }
-        else
-        {
-            key = 0;
-        }
+        key = 0;
+        if (flickVector.x > 0) key = 1;
+        if (flickVector.x < 0) key = -1;
 
         //移動
-        Walk();
+        Skip();
     }
 
     public static void FlickEnd()
     {
         //タップを離したときのジャンプ
-        TappingJump();
+        Jump();
 
         //以下初期化
         isMouseRerease = true;
@@ -294,10 +247,10 @@ public class PlayerController : MonoBehaviour
         buttonPosition.Set(0, 0, 0);
         buttonDownPosition.Set(0, 0, 0);
         rigid2D.velocity = new Vector2(0, rigid2D.velocity.y);
-        seconds = 0;
+        tappingTime = 0;
     }
 
-    public static void TappingJump()
+    public static void Jump()
     {
         buttonRereasePosition = Input.mousePosition;
         Vector3 tappingVector = buttonRereasePosition - buttonDownPosition;
@@ -305,17 +258,16 @@ public class PlayerController : MonoBehaviour
         float distance2 = Mathf.Pow(tappingVector.x, 2) + Mathf.Pow(tappingVector.y, 2) + Mathf.Pow(tappingVector.z, 2);
         float distance = Mathf.Sqrt(distance2);
 
-        bool isTap = Mathf.Abs(distance) < 1.0f && seconds < 0.2f;
+        bool isTap = Mathf.Abs(distance) < 1.0f && tappingTime < 0.2f;
 
         if (isTap && isGrounded && !isLaddering)
         {
             rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-            isJumpNow = true;
         }
     }
 
 
-    public static void Walk()
+    public static void Skip()
     {
         if (isHurting) return;
 
@@ -326,16 +278,6 @@ public class PlayerController : MonoBehaviour
         float y = rigid2D.transform.localScale.y;
         if (key != 0) rigid2D.transform.localScale = new Vector2(x, y);
 
-    }
-
-
-
-
-    public static bool IsStateEquals(string clip)
-    {
-        stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        //Debug.Log(stateInfo.IsName(clip));
-        return stateInfo.IsName(clip);
     }
 
     private void GroundCheck()
@@ -365,9 +307,11 @@ public class PlayerController : MonoBehaviour
                 isGrounded = true;
             }
         }
+        //Debug.Log(isGrounded);
     }
 
-    protected void SwhichAnimation() {
+    private void SwhichAnimation()
+    {
         //ジャンプアニメーション
         if (rigid2D.velocity.y > 0.0f && !isGrounded && !isHurting && !isLaddering) PlayerAmination.JumpAnim();
 
@@ -382,6 +326,9 @@ public class PlayerController : MonoBehaviour
 
         //スキップアニメーション
         if (!isLaddering && key != 0 && isGrounded) PlayerAmination.SkipAnim();
+
+        //はしごアニメーション
+        if (isLaddering) PlayerAmination.ClimbAnim();
 
     }
 

@@ -26,7 +26,7 @@ public class CameraContoroller : MonoBehaviour {
         y2 = playerPos.y;
 
         //前のフレームとのy座標の差がごくわずかならば、カメラ移動しない
-        if (Mathf.Abs(y2 - y1) < delta_y) y2 = y1;
+        //if (Mathf.Abs(y2 - y1) < delta_y) y2 = y1;
 
         if (playerPos.x < 0) x = 0;
         if (playerPos.y > 0) y2 = 0;
