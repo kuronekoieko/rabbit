@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 114268678398976028}
   - component: {fileID: 61999759702484244}
   m_Layer: 0
-  m_Name: slug 1
+  m_Name: slug
   m_TagString: slug
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
