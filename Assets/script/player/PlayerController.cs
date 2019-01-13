@@ -28,10 +28,11 @@ public class PlayerController : MonoBehaviour
     public static bool isHurting;
     protected static float defaultGravityScale;
     public static float sin;
-
-    public static Transform groundCheck_L;
-    public static Transform groundCheck_C;
-    public static Transform groundCheck_R;
+    public static GameObject collisionSlugObj;
+    public static float vyMax = 20.0f;
+    [SerializeField] public Transform groundCheck_L;
+    [SerializeField] public Transform groundCheck_C;
+    [SerializeField] public Transform groundCheck_R;
     public static bool isGrounded;
 
     public static string ladder = "ladder";
@@ -45,9 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         rigid2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        groundCheck_L = transform.Find("groundCheck_L");
-        groundCheck_C = transform.Find("groundCheck_C");
-        groundCheck_R = transform.Find("groundCheck_R");
         defaultGravityScale = rigid2D.gravityScale;
     }
 
@@ -75,6 +73,7 @@ public class PlayerController : MonoBehaviour
         //落ちたら戻る
         if (transform.position.y < -50) SceneManager.LoadScene("Stage1");
 
+        SpeedLimitter();
     }
 
     //コライダが呼ばれたときの処理========================================================================================================
@@ -90,6 +89,10 @@ public class PlayerController : MonoBehaviour
             rigid2D.gravityScale = 0;
         }
 
+        //あたったスラッグのオブジェクトを取得
+        if (other.gameObject.tag.Equals(slugHead)) collisionSlugObj = other.gameObject;
+
+
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -104,7 +107,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag.Equals(slugHead))
         {
             //slugから離れたときの処理
-            isCollisionSlug &= !other.gameObject.tag.Equals(slug);
+            isCollisionSlug &= !other.gameObject.tag.Equals(slugHead);
         }
 
     }
@@ -175,24 +178,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public static void CollisionSlug()
+    public static void CollisionSlug(GameObject slugObj)
     {
+        if (!slugObj == collisionSlugObj) return;
         if (isCollisionSlug) return;
-
         isCollisionSlug = true;
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpAnim();
+        Debug.Log("collision");
     }
 
     public static void Hurt()
     {
-
+        Debug.Log(isHurting);
         if (isHurting) return;
         isHurting = true;
-
+        Debug.Log("hurt");
         rigid2D.velocity = new Vector3(0, 0, 0);
-        rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
         rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
+        rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
+
     }
 
 
@@ -263,6 +268,7 @@ public class PlayerController : MonoBehaviour
         if (isTap && isGrounded && !isLaddering)
         {
             rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
+            Debug.Log("jump");
         }
     }
 
@@ -270,7 +276,7 @@ public class PlayerController : MonoBehaviour
     public static void Skip()
     {
         if (isHurting) return;
-        
+
         //歩いてるときは等速で移動
         rigid2D.velocity = new Vector2(walkSpeed * key, rigid2D.velocity.y);
         float x = Mathf.Abs(rigid2D.transform.localScale.x) * key;
@@ -331,6 +337,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private static void SpeedLimitter()
+    {
+        //y方向の速度制限
+        float vy = Mathf.Clamp(rigid2D.velocity.y, rigid2D.velocity.y, vyMax);
+        rigid2D.velocity = new Vector2(rigid2D.velocity.x, vy);
+    }
 
 }
 

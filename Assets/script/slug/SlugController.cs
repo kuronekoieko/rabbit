@@ -61,6 +61,8 @@ public class SlugController : MonoBehaviour
         mDeadSlug = deadSlug;
         Rigidbody2D rigid2D = deadSlug.GetComponent<Rigidbody2D>();
         CircleCollider2D circleCollider2D = deadSlug.GetComponent<CircleCollider2D>();
+        Debug.Log(deadSlug);
+
         animator = deadSlug.GetComponent<Animator>();
 
         //速度を止める
@@ -73,6 +75,8 @@ public class SlugController : MonoBehaviour
 
         //コライダの大きさも半分にする
         circleCollider2D.radius = circleCollider2D.radius / r;
+
+        //rigid2D.bodyType = RigidbodyType2D.Kinematic;
 
         //アニメーションを止める
         animator.speed = 0;
@@ -91,6 +95,16 @@ public class SlugController : MonoBehaviour
     {
         animator.speed = 1.0f;
         animator.SetTrigger("DeathTrigger");
+
+        CircleCollider2D circleCollider2D = deadSlug.GetComponent<CircleCollider2D>();
+        BoxCollider2D[] boxCollider2Ds = deadSlug.GetComponentsInChildren<BoxCollider2D>();
+
+        //コライダの大きさを0にする
+        circleCollider2D.radius = 0;
+        foreach (BoxCollider2D boxCollider2D in boxCollider2Ds)
+        {
+            boxCollider2D.size = new Vector2(0, 0);
+        }
 
         //数秒後に消す
         monoBehaviour.StartCoroutine(DelayMethod(0.8f, () =>
