@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
 
     public static Animator animator;
     public static float walkingSpeed = 2.0f;
-    public static float r = 2.0f;
+    public static float r = 3.0f;
     public static MonoBehaviour monoBehaviour;
     public static GameObject mDeadEnemy;
     Dictionary<string, int> key = new Dictionary<string, int>();
@@ -78,7 +78,6 @@ public class EnemyController : MonoBehaviour
 
         //コンポーネント取得
         Rigidbody2D rigid2D = deadEnemy.GetComponent<Rigidbody2D>();
-        CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
         animator = deadEnemy.GetComponent<Animator>();
 
         //速度を止める
@@ -113,7 +112,7 @@ public class EnemyController : MonoBehaviour
 
         BoxCollider2D[] boxCollider2Ds = deadEnemy.GetComponentsInChildren<BoxCollider2D>();
         CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
-        circleCollider2D.enabled = false;
+        if(circleCollider2D)circleCollider2D.enabled = false;
 
         //コライダをすべてオフにする
         foreach (BoxCollider2D boxCollider2D in boxCollider2Ds)
