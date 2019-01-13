@@ -13,6 +13,7 @@ TagManager:
   - slugL
   - slugR
   - enemyHead
+  - plant
   layers:
   - Default
   - TransparentFX
