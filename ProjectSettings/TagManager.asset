@@ -7,6 +7,11 @@ TagManager:
   - slug
   - playerSide
   - playerFoot
+  - slugLR
+  - slugHead
+  - ladder
+  - slugL
+  - slugR
   layers:
   - Default
   - TransparentFX
