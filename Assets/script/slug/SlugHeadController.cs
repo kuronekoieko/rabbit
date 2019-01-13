@@ -21,7 +21,7 @@ public class SlugHeadController : MonoBehaviour
     {
 
         //playerFootに衝突したときの動作
-        if (other.gameObject.tag.Equals(playerFoot)) PlayerController.CollisionSlug();
+        if (other.gameObject.tag.Equals(playerFoot)) PlayerController.CollisionSlug(gameObject);
 
     }
 
