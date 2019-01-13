@@ -23,12 +23,12 @@ public class PlayerController : MonoBehaviour
     public static float ladderingSpeed = 3.0f;
     public static int keyX;
     public static int keyY;
-    public static bool isCollisionSlug;
+    public static bool isCollisionEnemy;
     public static float tappingTime;
     public static bool isHurting;
     protected static float defaultGravityScale;
     public static float sin;
-    public static GameObject collisionSlugObj;
+    public static GameObject collisionEnemyObj;
     public static float vyMax = 20.0f;
     [SerializeField] public Transform groundCheck_L;
     [SerializeField] public Transform groundCheck_C;
@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour
     public static bool isGrounded;
 
     public static string ladder = "ladder";
-    public static string slug = "slug";
+    public static string enemy = "enemy";
     public static string Tilemap = "Tilemap";
-    public static string slugHead = "slugHead";
+    public static string enemyHead = "enemyHead";
 
     //フレーム毎の処理====================================================================================================
 
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //あたったスラッグのオブジェクトを取得
-        if (other.gameObject.tag.Equals(slugHead)) collisionSlugObj = other.gameObject;
+        if (other.gameObject.name.Equals("headCollider")) collisionEnemyObj = other.gameObject;
 
 
     }
@@ -104,16 +104,17 @@ public class PlayerController : MonoBehaviour
             isLaddering = false;
         }
 
-        if (other.gameObject.tag.Equals(slugHead))
+        if (other.gameObject.tag.Equals(enemyHead))
         {
-            //slugから離れたときの処理
-            isCollisionSlug &= !other.gameObject.tag.Equals(slugHead);
+            //enemyから離れたときの処理
+            isCollisionEnemy &= !other.gameObject.tag.Equals(enemyHead);
         }
 
     }
 
     void OnCollisionStay2D(Collision2D other)
     {
+        Debug.Log(other);
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -178,22 +179,22 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public static void CollisionSlug(GameObject slugObj)
+    public static void CollisionEnemy(GameObject enemyObj)
     {
-        if (!slugObj == collisionSlugObj) return;
-        if (isCollisionSlug) return;
-        isCollisionSlug = true;
+        if (!enemyObj == collisionEnemyObj) return;
+        if (isCollisionEnemy) return;
+        isCollisionEnemy = true;
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpAnim();
-        Debug.Log("collision");
+        //Debug.Log("collision");
     }
 
     public static void Hurt()
     {
-        Debug.Log(isHurting);
+        //Debug.Log(isHurting);
         if (isHurting) return;
         isHurting = true;
-        Debug.Log("hurt");
+        //Debug.Log("hurt");
         rigid2D.velocity = new Vector3(0, 0, 0);
         rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
@@ -268,7 +269,7 @@ public class PlayerController : MonoBehaviour
         if (isTap && isGrounded && !isLaddering)
         {
             rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-            Debug.Log("jump");
+            //Debug.Log("jump");
         }
     }
 
