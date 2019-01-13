@@ -75,6 +75,8 @@ public class EnemyController : MonoBehaviour
     public static void Death(GameObject deadEnemy)
     {
         mDeadEnemy = deadEnemy;
+
+        //コンポーネント取得
         Rigidbody2D rigid2D = deadEnemy.GetComponent<Rigidbody2D>();
         CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
         animator = deadEnemy.GetComponent<Animator>();
@@ -87,8 +89,9 @@ public class EnemyController : MonoBehaviour
         float y = rigid2D.transform.localScale.y / r;
         rigid2D.transform.localScale = new Vector2(x, y);
 
-        //コライダの大きさも半分にする
-        circleCollider2D.radius = circleCollider2D.radius / r;
+        //その場に固定
+        deadEnemy.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
 
         //アニメーションを止める
         animator.speed = 0;
@@ -108,14 +111,14 @@ public class EnemyController : MonoBehaviour
         animator.speed = 1.0f;
         animator.SetTrigger("DeathTrigger");
 
-        CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
         BoxCollider2D[] boxCollider2Ds = deadEnemy.GetComponentsInChildren<BoxCollider2D>();
+        CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
+        circleCollider2D.enabled = false;
 
-        //コライダの大きさを0にする
-        circleCollider2D.radius = 0;
+        //コライダをすべてオフにする
         foreach (BoxCollider2D boxCollider2D in boxCollider2Ds)
         {
-            boxCollider2D.size = new Vector2(0, 0);
+            boxCollider2D.enabled = false;
         }
 
         //数秒後に消す

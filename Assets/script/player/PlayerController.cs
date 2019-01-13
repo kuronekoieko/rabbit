@@ -114,6 +114,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other)
     {
+        Debug.Log(other);
     }
 
     void OnCollisionExit2D(Collision2D collision)
