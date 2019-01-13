@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugLController : MonoBehaviour
+public class EnemyLController : MonoBehaviour
 {
 
     string playerSide = "playerSide";

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugRController : MonoBehaviour
+public class EnemyRController : MonoBehaviour
 {
 
 

@@ -12,6 +12,7 @@ TagManager:
   - ladder
   - slugL
   - slugR
+  - enemyHead
   layers:
   - Default
   - TransparentFX
