@@ -114,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D other)
     {
-        Debug.Log(other);
+        //Debug.Log(other);
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -186,7 +186,6 @@ public class PlayerController : MonoBehaviour
         isCollisionEnemy = true;
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
         PlayerAmination.JumpAnim();
-        //Debug.Log("collision");
     }
 
     public static void Hurt()

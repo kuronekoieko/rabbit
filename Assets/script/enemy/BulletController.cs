@@ -14,9 +14,7 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    GetComponent<Rigidbody2D>().velocity
-                    = new Vector2(3.0f * -1, 0);
-
+        GetComponent<Rigidbody2D>().velocity = new Vector2(3.0f * -1, 0);
         Destroy(gameObject, 3.0f);
     }
 
