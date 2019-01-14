@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-
-    public static Animator animator;
     public static float walkingSpeed = 2.0f;
     public static float r = 2.0f;
     public static MonoBehaviour monoBehaviour;
     public static GameObject mDeadEnemy;
     Dictionary<string, int> key = new Dictionary<string, int>();
     Dictionary<string, float> seconds = new Dictionary<string, float>();
+    //Dictionary<string, GameObject> bullet = new Dictionary<string, GameObject>();
+    public GameObject bullet;
 
 
     void Start()
@@ -33,6 +33,18 @@ public class EnemyController : MonoBehaviour
 
         //敵が増えるたびに秒数のカウントが早くなるので、敵ごとにカウントを分ける
         seconds[gameObject.name] = 0;
+
+        // ゲームオブジェクトの子のTransformを列挙
+        foreach (Transform child in gameObject.transform)
+        {
+            // Transformからゲームオブジェクト取得・削除
+            if (child.gameObject.name.Equals("bullet"))
+            {
+                //bullet[gameObject.name] = child.gameObject;
+                //bullet[gameObject.name].SetActive(false);
+            }
+        }
+
     }
 
     void Update()
@@ -41,18 +53,37 @@ public class EnemyController : MonoBehaviour
         //nullチェック
         if (!mDeadEnemy)
         {
-            Walk();
+            if (gameObject.tag.Equals("plant"))
+            {
+                PlantMotion();
+            }
+            else
+            {
+                Walk();
+            }
         }
         else
         {
             //死んだenemyと今のenemyがちがければ歩く
-            if (!gameObject.transform.name.Equals(mDeadEnemy.transform.name)) Walk();
+            if (!gameObject.transform.name.Equals(mDeadEnemy.transform.name))
+            {
+                if (gameObject.tag.Equals("plant"))
+                {
+                    PlantMotion();
+                }
+                else
+                {
+                    Walk();
+                }
+
+            }
         }
     }
 
     public void Walk()
     {
         Rigidbody2D rigid2D = GetComponent<Rigidbody2D>();
+
         //タイマーで周期的に反転させる
         seconds[gameObject.name] += Time.deltaTime;
 
@@ -60,6 +91,7 @@ public class EnemyController : MonoBehaviour
         {
             seconds[gameObject.name] = 0;
             key[gameObject.name] *= -1;
+
         }
 
         //移動
@@ -71,6 +103,48 @@ public class EnemyController : MonoBehaviour
         rigid2D.transform.localScale = new Vector2(x, y);
     }
 
+    public void PlantMotion()
+    {
+
+        //タイマーで周期的に反転させる
+        seconds[gameObject.name] += Time.deltaTime;
+
+
+        AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+
+
+
+
+        if (seconds[gameObject.name] < 3.0f)
+        {
+            if (!animatorStateInfo.IsName("idle"))
+            {
+                GetComponent<Animator>().SetTrigger("IdleTrigger");
+            }
+
+
+        }
+
+        if (seconds[gameObject.name] > 3.0f)
+        {
+            if (!animatorStateInfo.IsName("attack"))
+            {
+                GetComponent<Animator>().SetTrigger("AttackTrigger");
+            }
+
+        }
+        if (seconds[gameObject.name] > 3.9f)
+        {
+            float x = gameObject.transform.position.x - 0.5f;
+            float y = gameObject.transform.position.y;
+            float z = gameObject.transform.position.z;
+            Instantiate(bullet, new Vector3(x, y, z), Quaternion.identity);
+            seconds[gameObject.name] = 0.0f;
+        }
+
+    }
+
 
     public static void Death(GameObject deadEnemy)
     {
@@ -78,8 +152,7 @@ public class EnemyController : MonoBehaviour
 
         //コンポーネント取得
         Rigidbody2D rigid2D = deadEnemy.GetComponent<Rigidbody2D>();
-        CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
-        animator = deadEnemy.GetComponent<Animator>();
+        Animator animator = deadEnemy.GetComponent<Animator>();
 
         //速度を止める
         rigid2D.velocity = new Vector3(0, 0, 0);
@@ -108,14 +181,15 @@ public class EnemyController : MonoBehaviour
 
     public static void DeathAnimationTrigger(GameObject deadEnemy)
     {
+        Animator animator = deadEnemy.GetComponent<Animator>();
         animator.speed = 1.0f;
         animator.SetTrigger("DeathTrigger");
 
         BoxCollider2D[] boxCollider2Ds = deadEnemy.GetComponentsInChildren<BoxCollider2D>();
         CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
-        circleCollider2D.enabled = false;
 
         //コライダをすべてオフにする
+        if (circleCollider2D) circleCollider2D.enabled = false;
         foreach (BoxCollider2D boxCollider2D in boxCollider2Ds)
         {
             boxCollider2D.enabled = false;
@@ -134,7 +208,5 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         action();
     }
-
-
 
 }
