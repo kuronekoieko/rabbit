@@ -23,12 +23,9 @@ public class ChestController : MonoBehaviour {
     {
 
         if (other.gameObject.name.Equals("player")&& GetComponent<SpriteRenderer>().sprite == sprites[0]) {
-            float x = gameObject.transform.position.x;
-            float y = gameObject.transform.position.y;
-            float z = gameObject.transform.position.z;
             StartCoroutine(DelayMethod(0.3f, () =>
             {
-                Instantiate(star, new Vector3(x, y, z), Quaternion.identity);
+                Instantiate(star, gameObject.transform.position, Quaternion.identity);
             }));
 
             GetComponent<SpriteRenderer>().sprite = sprites[1];
