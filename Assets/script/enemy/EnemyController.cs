@@ -167,8 +167,15 @@ public class EnemyController : MonoBehaviour
     public static void DeathAnimationTrigger(GameObject deadEnemy)
     {
         Animator animator = deadEnemy.GetComponent<Animator>();
+        Rigidbody2D rigid2D = deadEnemy.GetComponent<Rigidbody2D>();
         animator.speed = 1.0f;
         animator.SetTrigger("DeathTrigger");
+
+        //大きさを戻す
+        float x = rigid2D.transform.localScale.x;
+        float y = rigid2D.transform.localScale.y * 2.0f;
+        rigid2D.transform.localScale = new Vector2(x, y);
+
 
         BoxCollider2D[] boxCollider2Ds = deadEnemy.GetComponentsInChildren<BoxCollider2D>();
         CircleCollider2D circleCollider2D = deadEnemy.GetComponent<CircleCollider2D>();
