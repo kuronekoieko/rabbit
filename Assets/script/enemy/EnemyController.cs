@@ -11,6 +11,8 @@ public class EnemyController : MonoBehaviour
     public static GameObject mDeadEnemy;
     Dictionary<string, int> key = new Dictionary<string, int>();
     Dictionary<string, float> seconds = new Dictionary<string, float>();
+    //Dictionary<string, GameObject> bullet = new Dictionary<string, GameObject>();
+    public GameObject bullet;
 
 
     void Start()
@@ -31,6 +33,18 @@ public class EnemyController : MonoBehaviour
 
         //敵が増えるたびに秒数のカウントが早くなるので、敵ごとにカウントを分ける
         seconds[gameObject.name] = 0;
+
+        // ゲームオブジェクトの子のTransformを列挙
+        foreach (Transform child in gameObject.transform)
+        {
+            // Transformからゲームオブジェクト取得・削除
+            if (child.gameObject.name.Equals("bullet"))
+            {
+                //bullet[gameObject.name] = child.gameObject;
+                //bullet[gameObject.name].SetActive(false);
+            }
+        }
+
     }
 
     void Update()
@@ -91,25 +105,43 @@ public class EnemyController : MonoBehaviour
 
     public void PlantMotion()
     {
-        Rigidbody2D rigid2D = GetComponent<Rigidbody2D>();
-        Animator animator = GetComponent<Animator>();
 
         //タイマーで周期的に反転させる
         seconds[gameObject.name] += Time.deltaTime;
 
-        if (seconds[gameObject.name] > 3.0f)
+
+        AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+
+
+
+
+
+        if (seconds[gameObject.name] < 3.0f)
         {
-            seconds[gameObject.name] = 0;
-            key[gameObject.name] *= -1;
-            animator.SetTrigger("AttackTrigger");
+            if (!animatorStateInfo.IsName("idle"))
+            {
+                GetComponent<Animator>().SetTrigger("IdleTrigger");
+            }
+
+
         }
 
-        //左右反転
-        float x = Mathf.Abs(rigid2D.transform.localScale.x) * -key[gameObject.name];
-        float y = rigid2D.transform.localScale.y;
-        //rigid2D.transform.localScale = new Vector2(x, y);
+        if (seconds[gameObject.name] > 3.0f)
+        {
+            if (!animatorStateInfo.IsName("attack"))
+            {
+                GetComponent<Animator>().SetTrigger("AttackTrigger");
+            }
 
-
+        }
+        if (seconds[gameObject.name] > 3.9f)
+        {
+            float x = gameObject.transform.position.x - 0.5f;
+            float y = gameObject.transform.position.y;
+            float z = gameObject.transform.position.z;
+            Instantiate(bullet, new Vector3(x, y, z), Quaternion.identity);
+            seconds[gameObject.name] = 0.0f;
+        }
 
     }
 
@@ -176,7 +208,5 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         action();
     }
-
-
 
 }
