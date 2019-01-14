@@ -8,11 +8,10 @@ public class EnemyController : MonoBehaviour
     public static float walkingSpeed = 2.0f;
     public static float r = 2.0f;
     public static MonoBehaviour monoBehaviour;
-    public static GameObject mDeadEnemy;
     Dictionary<string, int> key = new Dictionary<string, int>();
     Dictionary<string, float> seconds = new Dictionary<string, float>();
-    //Dictionary<string, GameObject> bullet = new Dictionary<string, GameObject>();
-    public GameObject bullet;
+    public static Dictionary<string, GameObject> mDeadEnemy = new Dictionary<string, GameObject>();
+    public GameObject bullet;//プレハブを取得
 
 
     void Start()
@@ -34,24 +33,15 @@ public class EnemyController : MonoBehaviour
         //敵が増えるたびに秒数のカウントが早くなるので、敵ごとにカウントを分ける
         seconds[gameObject.name] = 0;
 
-        // ゲームオブジェクトの子のTransformを列挙
-        foreach (Transform child in gameObject.transform)
-        {
-            // Transformからゲームオブジェクト取得・削除
-            if (child.gameObject.name.Equals("bullet"))
-            {
-                //bullet[gameObject.name] = child.gameObject;
-                //bullet[gameObject.name].SetActive(false);
-            }
-        }
-
+        //初期化
+        mDeadEnemy[gameObject.name] = null;
     }
 
     void Update()
     {
 
         //nullチェック
-        if (!mDeadEnemy)
+        if (!mDeadEnemy[gameObject.name])
         {
             if (gameObject.tag.Equals("plant"))
             {
@@ -65,7 +55,7 @@ public class EnemyController : MonoBehaviour
         else
         {
             //死んだenemyと今のenemyがちがければ歩く
-            if (!gameObject.transform.name.Equals(mDeadEnemy.transform.name))
+            if (!gameObject.transform.name.Equals(mDeadEnemy[gameObject.name].transform.name))
             {
                 if (gameObject.tag.Equals("plant"))
                 {
@@ -105,16 +95,13 @@ public class EnemyController : MonoBehaviour
 
     public void PlantMotion()
     {
+        //死亡判定
+        if (mDeadEnemy[gameObject.name]) return;
 
         //タイマーで周期的に反転させる
         seconds[gameObject.name] += Time.deltaTime;
 
-
         AnimatorStateInfo animatorStateInfo = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-
-
-
-
 
         if (seconds[gameObject.name] < 3.0f)
         {
@@ -122,8 +109,6 @@ public class EnemyController : MonoBehaviour
             {
                 GetComponent<Animator>().SetTrigger("IdleTrigger");
             }
-
-
         }
 
         if (seconds[gameObject.name] > 3.0f)
@@ -132,8 +117,8 @@ public class EnemyController : MonoBehaviour
             {
                 GetComponent<Animator>().SetTrigger("AttackTrigger");
             }
-
         }
+
         if (seconds[gameObject.name] > 3.9f)
         {
             float x = gameObject.transform.position.x - 0.5f;
@@ -148,7 +133,7 @@ public class EnemyController : MonoBehaviour
 
     public static void Death(GameObject deadEnemy)
     {
-        mDeadEnemy = deadEnemy;
+        mDeadEnemy[deadEnemy.name] = deadEnemy;
 
         //コンポーネント取得
         Rigidbody2D rigid2D = deadEnemy.GetComponent<Rigidbody2D>();
