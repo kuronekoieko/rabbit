@@ -20,10 +20,9 @@ public class EnemyLController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //衝突を検知したのが"playerLR"ならprayerに攻撃
-        if (other.gameObject.tag.Equals(playerSide))
+        if (other.gameObject.name.Equals(playerSide))
         {
             PlayerController.Hurt();
-            //Debug.Log("L");
         }
     }
 

@@ -3,29 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ChestController : MonoBehaviour {
+public class ChestController : MonoBehaviour
+{
 
 
     public Sprite[] sprites;
     public GameObject star;
+    public static int starNum;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     void OnTriggerExit2D(Collider2D other)
     {
 
-        if (other.gameObject.name.Equals("player")&& GetComponent<SpriteRenderer>().sprite == sprites[0]) {
+        if (other.gameObject.name.Equals("player") && GetComponent<SpriteRenderer>().sprite == sprites[0])
+        {
             StartCoroutine(DelayMethod(0.3f, () =>
             {
-                Instantiate(star, gameObject.transform.position, Quaternion.identity);
+                GameObject go = Instantiate(star, gameObject.transform.position, Quaternion.identity);
+                starNum++;
+                go.name = "star (" + starNum + ")";
+                go.GetComponent<StarContoroller>().SetGameObject(go);
             }));
 
             GetComponent<SpriteRenderer>().sprite = sprites[1];

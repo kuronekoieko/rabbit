@@ -71,7 +71,14 @@ public class PlayerController : MonoBehaviour
         }
 
         //落ちたら戻る
-        if (transform.position.y < -50) SceneManager.LoadScene("Stage1");
+        if (transform.position.y < -50)
+        {
+            // 現在のScene名を取得する
+            Scene loadScene = SceneManager.GetActiveScene();
+            // Sceneの読み直し
+            SceneManager.LoadScene(loadScene.name);
+            Gamedirector.InitializeStatus();
+        }
 
         SpeedLimitter();
     }
@@ -189,14 +196,12 @@ public class PlayerController : MonoBehaviour
 
     public static void Hurt()
     {
-        //Debug.Log(isHurting);
         if (isHurting) return;
         isHurting = true;
-        //Debug.Log("hurt");
         rigid2D.velocity = new Vector3(0, 0, 0);
         rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-
+        Gamedirector.DecreaseHP();
     }
 
 
