@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlugHeadController : MonoBehaviour
+public class EnemyHeadController : MonoBehaviour
 {
 
     string playerFoot = "playerFoot";
@@ -21,7 +21,7 @@ public class SlugHeadController : MonoBehaviour
     {
 
         //playerFootに衝突したときの動作
-        if (other.gameObject.tag.Equals(playerFoot)) PlayerController.CollisionSlug(gameObject);
+        if (other.gameObject.name.Equals(playerFoot)) PlayerController.CollisionEnemy(gameObject);
 
     }
 
