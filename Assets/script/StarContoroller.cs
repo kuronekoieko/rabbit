@@ -22,6 +22,7 @@ public class StarContoroller : MonoBehaviour
     {
         if (collision.gameObject.name.Equals("player"))
         {
+            Gamedirector.StarCounter();
             Destroy(gameObject);
         }
     }

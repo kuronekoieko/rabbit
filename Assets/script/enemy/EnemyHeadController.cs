@@ -21,7 +21,7 @@ public class EnemyHeadController : MonoBehaviour
     {
 
         //playerFootに衝突したときの動作
-        if (other.gameObject.tag.Equals(playerFoot)) PlayerController.CollisionEnemy(gameObject);
+        if (other.gameObject.name.Equals(playerFoot)) PlayerController.CollisionEnemy(gameObject);
 
     }
 

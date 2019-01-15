@@ -17,7 +17,7 @@ public class EnemyBottomController : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D other)
     {
         //衝突を検知したのが"player"ならprayerに攻撃
-        if (other.gameObject.tag.Equals("player"))
+        if (other.gameObject.tag.Equals("Player"))
         {
             PlayerController.Hurt();
         }

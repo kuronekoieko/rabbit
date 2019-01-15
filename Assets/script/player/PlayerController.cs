@@ -189,14 +189,12 @@ public class PlayerController : MonoBehaviour
 
     public static void Hurt()
     {
-        //Debug.Log(isHurting);
         if (isHurting) return;
         isHurting = true;
-        //Debug.Log("hurt");
         rigid2D.velocity = new Vector3(0, 0, 0);
         rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
         rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-
+        Gamedirector.DecreaseHP();
     }
 
 

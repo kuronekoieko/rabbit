@@ -18,6 +18,7 @@ public class CarrotController : MonoBehaviour {
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
+            Gamedirector.HealHP();
             Destroy(gameObject);
         }
     }
