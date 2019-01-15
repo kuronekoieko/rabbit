@@ -71,7 +71,14 @@ public class PlayerController : MonoBehaviour
         }
 
         //落ちたら戻る
-        if (transform.position.y < -50) SceneManager.LoadScene("Stage1");
+        if (transform.position.y < -50)
+        {
+            // 現在のScene名を取得する
+            Scene loadScene = SceneManager.GetActiveScene();
+            // Sceneの読み直し
+            SceneManager.LoadScene(loadScene.name);
+            Gamedirector.InitializeStatus();
+        }
 
         SpeedLimitter();
     }

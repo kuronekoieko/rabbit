@@ -7,7 +7,7 @@ public class Gamedirector : MonoBehaviour
 
 
    static int starCount;
-   static int HP=7;
+   static int HP;
 
    static int starCountMax = 7;
    static int starCountMin = 0;
@@ -18,13 +18,21 @@ public class Gamedirector : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        InitializeStatus();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public static void InitializeStatus() {
+
+        HP = HPMax;
+        starCount = starCountMin;
+        Debug.Log("HP:" + HP);
+        Debug.Log("star:" + starCount);
     }
 
     public static void StarCounter()
