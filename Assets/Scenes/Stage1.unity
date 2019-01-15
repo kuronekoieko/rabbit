@@ -466,11 +466,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -4.48
+      value: 12.25
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -2.91
+      value: -12.81
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.z
@@ -4610,7 +4610,7 @@ GameObject:
   - component: {fileID: 654549784}
   m_Layer: 0
   m_Name: playerSide
-  m_TagString: playerSide
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4885,6 +4885,48 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1a57f2bd3f63f48fa8b80c7f2288e80f, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1001 &1029006758
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -2.607536
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -2.9815817
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4462382919465934, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 09795116d36854bdf99dc05a7d33aa99, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1082531353
 GameObject:
@@ -7164,11 +7206,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.3460228
+      value: 4.07
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -2.929256
+      value: -2.86
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.z
@@ -7260,11 +7302,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0.38
+      value: 15.38
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -2.91
+      value: -12.76
       objectReference: {fileID: 0}
     - target: {fileID: 4946133394183024, guid: ed7b1ff02ddef424ab7464ff132b25d6, type: 2}
       propertyPath: m_LocalPosition.z
@@ -7319,7 +7361,7 @@ GameObject:
   - component: {fileID: 2119449556}
   m_Layer: 0
   m_Name: playerFoot
-  m_TagString: playerFoot
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
