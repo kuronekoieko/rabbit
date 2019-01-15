@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Gamedirector : MonoBehaviour
 {
@@ -24,7 +25,7 @@ public class Gamedirector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (HP == 0) PlayerDead();
     }
 
     public static void InitializeStatus() {
@@ -55,6 +56,14 @@ public class Gamedirector : MonoBehaviour
         HP++;
         HP = Mathf.Clamp(HP, HPMin, HPMax);
         Debug.Log("HP:" + HP);
+    }
+
+    public static void PlayerDead() {
+        // 現在のScene名を取得する
+        Scene loadScene = SceneManager.GetActiveScene();
+        // Sceneの読み直し
+        SceneManager.LoadScene(loadScene.name);
+        InitializeStatus();
     }
 
 }
