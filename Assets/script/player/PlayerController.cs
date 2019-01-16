@@ -303,13 +303,12 @@ public class PlayerController : MonoBehaviour
             {
                 //nullチェック
                 if (!groundCollider) break;
-                //Triggerがオンになってるコライダは対象外
-                if (groundCollider.isTrigger) break;
-
-                isGrounded = true;
+                //Tilemapを検知したら接地
+                if (groundCollider.gameObject.name.Equals(Tilemap)) isGrounded = true;
+                //宝箱を検知したら接地
+                if (groundCollider.gameObject.tag.Equals("chest")) isGrounded = true;
             }
         }
-        //Debug.Log(isGrounded);
     }
 
     private void SwhichAnimation()
