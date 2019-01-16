@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
 
     public static Rigidbody2D rigid2D;
-    public static float jumpYForce = 900.0f;
+    public static float jumpYForce = 20.0f;
     public static float walkSpeed = 10.0f;
     public static Vector3 buttonDownPosition;
     public static Vector3 buttonPosition;
@@ -51,7 +51,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-
         //接地判定
         GroundCheck();
 
@@ -71,16 +70,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //落ちたら戻る
-        if (transform.position.y < -50)
-        {
-            // 現在のScene名を取得する
-            Scene loadScene = SceneManager.GetActiveScene();
-            // Sceneの読み直し
-            SceneManager.LoadScene(loadScene.name);
-            Gamedirector.InitializeStatus();
-        }
+        if (transform.position.y < -50) Gamedirector.PlayerDead();
 
-        SpeedLimitter();
+        //スピード制限
+        //SpeedLimitter();
     }
 
     //コライダが呼ばれたときの処理========================================================================================================
@@ -129,9 +122,9 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-
-        //Tilemapに衝突したときのに、ダメージを解除する
-        isHurting &= !collision.gameObject.name.Equals(Tilemap);
+        //Tilemapに衝突したときに、ダメージを解除する
+        //宝箱に乗ったときは、宝箱のコライダが薄いため、Tilemapを検知する
+        if (!collision.gameObject.name.Equals(Tilemap)) isHurting = false;
     }
 
     //普通のメソッド==============================================================================================================
@@ -271,8 +264,8 @@ public class PlayerController : MonoBehaviour
 
         if (isTap && isGrounded && !isLaddering)
         {
-            rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
-            //Debug.Log("jump");
+            //rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
+            rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
         }
     }
 
@@ -328,7 +321,7 @@ public class PlayerController : MonoBehaviour
         if (rigid2D.velocity.y < -2 && !isGrounded && !isHurting && !isLaddering) PlayerAmination.FallAnim();
 
         //攻撃をうけたときのアニメーション
-        if (isHurting) PlayerAmination.HurtAnim();
+        if (isHurting && !isGrounded) PlayerAmination.HurtAnim();
 
         //idleアニメーション
         if (key == 0 && isGrounded) PlayerAmination.IdleAnim();

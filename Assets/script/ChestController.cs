@@ -23,20 +23,15 @@ public class ChestController : MonoBehaviour
 
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.name.Equals("player") && GetComponent<SpriteRenderer>().sprite == sprites[0])
+        if (other.gameObject.name.Equals("itemCheck") && GetComponent<SpriteRenderer>().sprite == sprites[0])
         {
-            StartCoroutine(DelayMethod(0.3f, () =>
-            {
-                GameObject go = Instantiate(star, gameObject.transform.position, Quaternion.identity);
-                starNum++;
-                go.name = "star (" + starNum + ")";
-            }));
-
+            GameObject go = Instantiate(star, gameObject.transform.position, Quaternion.identity);
+            starNum++;
+            go.name = "star (" + starNum + ")";
             GetComponent<SpriteRenderer>().sprite = sprites[1];
-
         }
     }
 

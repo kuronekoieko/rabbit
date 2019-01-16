@@ -39,7 +39,7 @@ public class PlayerAmination : MonoBehaviour
         //連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(jump)) return;
         animator.SetTrigger(JumpTrigger);
-        //Debug.Log(parameters);
+        //Debug.Log(hurt);
     }
 
     public static void SkipAnim()
@@ -47,7 +47,7 @@ public class PlayerAmination : MonoBehaviour
         //連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(skip)) return;
         animator.SetTrigger(SkipTrigger);
-        //Debug.Log(parameters);
+        //Debug.Log(skip);
     }
 
     public static void IdleAnim()
@@ -55,7 +55,7 @@ public class PlayerAmination : MonoBehaviour
         //連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(idle)) return;
         animator.SetTrigger(IdleTrigger);
-        //Debug.Log(parameters);
+        //Debug.Log(idle);
     }
 
 
@@ -64,7 +64,7 @@ public class PlayerAmination : MonoBehaviour
         //連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(fall)) return;
         animator.SetTrigger(FallTrigger);
-        //Debug.Log(parameters);
+       //Debug.Log(fall);
     }
 
 
@@ -73,7 +73,7 @@ public class PlayerAmination : MonoBehaviour
         //連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(climb)) return;
         animator.SetTrigger(ClimbTrigger);
-        //Debug.Log(parameters);
+        //Debug.Log(climb);
     }
 
     public static void HurtAnim()
@@ -81,6 +81,7 @@ public class PlayerAmination : MonoBehaviour
         // 連続再生で止まってるように見えるのをを防ぐ
         if (IsAnimState(hurt)) return;
         animator.SetTrigger(HurtTrigger);
+        //Debug.Log(hurt);
     }
 
     public static bool IsAnimState(string state)
