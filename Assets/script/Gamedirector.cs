@@ -28,8 +28,8 @@ public class Gamedirector : MonoBehaviour
     {
         InitializeStatus();
 
-        HPs = GetChildren("Canvas/HPs");
-        Stars = GetChildren("Canvas/stars");
+        HPs = GetChildren("Canvas/Panel/HPs");
+        Stars = GetChildren("Canvas/Panel/stars");
 
     }
 
