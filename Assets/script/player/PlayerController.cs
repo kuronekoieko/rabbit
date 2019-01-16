@@ -122,9 +122,11 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //Tilemapに衝突したときに、ダメージを解除する
-        //宝箱に乗ったときは、宝箱のコライダが薄いため、Tilemapを検知する
-        if (!collision.gameObject.name.Equals(Tilemap)) isHurting = false;
+        //Tilemapに衝突したとき宝箱に乗ったときに、ダメージを解除する
+        if (collision.gameObject.name.Equals(Tilemap) || collision.gameObject.tag.Equals("chest"))
+        {
+            isHurting = false;
+        }
     }
 
     //普通のメソッド==============================================================================================================
@@ -183,7 +185,7 @@ public class PlayerController : MonoBehaviour
         if (!enemyObj == collisionEnemyObj) return;
         if (isCollisionEnemy) return;
         isCollisionEnemy = true;
-        rigid2D.AddForce(rigid2D.transform.up * jumpYForce * 2.0f);
+        rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
         PlayerAmination.JumpAnim();
     }
 
@@ -192,8 +194,7 @@ public class PlayerController : MonoBehaviour
         if (isHurting) return;
         isHurting = true;
         rigid2D.velocity = new Vector3(0, 0, 0);
-        rigid2D.velocity = new Vector3(3.0f * -key, rigid2D.velocity.y, 0);
-        rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
+        rigid2D.velocity = new Vector3(3.0f * -key, jumpYForce, 0);
         Gamedirector.DecreaseHP();
     }
 
@@ -264,7 +265,6 @@ public class PlayerController : MonoBehaviour
 
         if (isTap && isGrounded && !isLaddering)
         {
-            //rigid2D.AddForce(rigid2D.transform.up * jumpYForce);
             rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
         }
     }
