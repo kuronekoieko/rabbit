@@ -26,7 +26,7 @@ public class ChestController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.name.Equals("itemCheck") && GetComponent<SpriteRenderer>().sprite == sprites[0])
+        if (other.gameObject.name.Equals("playerSide") && GetComponent<SpriteRenderer>().sprite == sprites[0])
         {
             GameObject go = Instantiate(star, gameObject.transform.position, Quaternion.identity);
             starNum++;
