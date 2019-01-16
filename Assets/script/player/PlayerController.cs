@@ -184,6 +184,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!enemyObj == collisionEnemyObj) return;
         if (isCollisionEnemy) return;
+        isHurting = false;
         isCollisionEnemy = true;
         rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
         PlayerAmination.JumpAnim();
