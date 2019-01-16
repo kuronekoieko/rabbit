@@ -16,7 +16,7 @@ public class CarrotController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.gameObject.name.Equals("itemCheck"))
         {
             Gamedirector.HealHP();
             Destroy(gameObject);

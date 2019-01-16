@@ -33,7 +33,6 @@ public class ChestController : MonoBehaviour
                 GameObject go = Instantiate(star, gameObject.transform.position, Quaternion.identity);
                 starNum++;
                 go.name = "star (" + starNum + ")";
-                go.GetComponent<StarContoroller>().SetGameObject(go);
             }));
 
             GetComponent<SpriteRenderer>().sprite = sprites[1];
