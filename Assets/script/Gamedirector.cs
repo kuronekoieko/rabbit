@@ -31,6 +31,16 @@ public class Gamedirector : MonoBehaviour
         HPs = GetChildren("Canvas/Panel/HPs");
         Stars = GetChildren("Canvas/Panel/stars");
 
+        //HPをHPMaxの数だけ表示
+        for (int i = 1; i < HPs.Length - 1; i++)
+        {
+            if (!HPs[i]) return;
+            HPs[i].GetComponent<Image>().enabled = false;
+            if (i > HPMax) continue;
+            HPs[i].GetComponent<Image>().enabled = true;
+        }
+
+
     }
 
     // Update is called once per frame
