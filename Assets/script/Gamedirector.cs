@@ -14,7 +14,7 @@ public class Gamedirector : MonoBehaviour
     static int starCountMax = 7;
     static int starCountMin = 0;
 
-    static int HPMax = 7;
+    static int HPMax = 3;
     static int HPMin = 0;
 
     static GameObject[] HPs;
