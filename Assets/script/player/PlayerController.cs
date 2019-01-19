@@ -86,7 +86,9 @@ public class PlayerController : MonoBehaviour
         {
             //はしごに入った瞬間に呼ばれる
             isLaddering = true;
+            isHurting = false;
             rigid2D.gravityScale = 0;
+            rigid2D.velocity = new Vector3(0, 0, 0);
         }
 
         //あたったスラッグのオブジェクトを取得
@@ -101,6 +103,11 @@ public class PlayerController : MonoBehaviour
         {
             //はしごを抜けた瞬間に呼ばれる
             rigid2D.gravityScale = defaultGravityScale;
+
+            if (rigid2D.velocity.y>0.0f) {
+                rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
+            }
+
             isLaddering = false;
         }
 
@@ -321,10 +328,10 @@ public class PlayerController : MonoBehaviour
         if (rigid2D.velocity.y < -2 && !isGrounded && !isHurting && !isLaddering) PlayerAmination.FallAnim();
 
         //攻撃をうけたときのアニメーション
-        if (isHurting && !isGrounded) PlayerAmination.HurtAnim();
+        if (isHurting && !isGrounded && !isLaddering) PlayerAmination.HurtAnim();
 
         //idleアニメーション
-        if (key == 0 && isGrounded) PlayerAmination.IdleAnim();
+        if (key == 0 && isGrounded && !isLaddering) PlayerAmination.IdleAnim();
 
         //スキップアニメーション
         if (!isLaddering && key != 0 && isGrounded) PlayerAmination.SkipAnim();
