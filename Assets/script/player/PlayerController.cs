@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //あたったスラッグのオブジェクトを取得
-        if (other.gameObject.name.Equals("headCollider")) collisionEnemyObj = other.gameObject;
+        //if (other.gameObject.name.Equals("headCollider")) collisionEnemyObj = other.gameObject;
 
 
     }
@@ -104,7 +104,8 @@ public class PlayerController : MonoBehaviour
             //はしごを抜けた瞬間に呼ばれる
             rigid2D.gravityScale = defaultGravityScale;
 
-            if (rigid2D.velocity.y>0.0f) {
+            if (rigid2D.velocity.y > 0.0f)
+            {
                 rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
             }
 
@@ -189,7 +190,8 @@ public class PlayerController : MonoBehaviour
 
     public static void CollisionEnemy(GameObject enemyObj)
     {
-        if (!enemyObj == collisionEnemyObj) return;
+        //取得したオブジェクトが一致しないことがあるので使わない
+        //if (!enemyObj == collisionEnemyObj) return;
         if (isCollisionEnemy) return;
         isHurting = false;
         isCollisionEnemy = true;
@@ -201,8 +203,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isHurting) return;
         isHurting = true;
-        rigid2D.velocity = new Vector3(0, 0, 0);
-        rigid2D.velocity = new Vector3(3.0f * -key, jumpYForce, 0);
+        rigid2D.velocity = new Vector2(0, 0);
+        rigid2D.velocity = new Vector2(3.0f * -key, jumpYForce);
         Gamedirector.DecreaseHP();
     }
 
