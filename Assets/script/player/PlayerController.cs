@@ -35,10 +35,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public Transform groundCheck_R;
     public static bool isGrounded;
 
-    public static string ladder = "ladder";
-    public static string enemy = "enemy";
-    public static string Tilemap = "Tilemap";
-    public static string enemyHead = "enemyHead";
+    static string ladder = "ladder";
+    static string enemy = "enemy";
+    static string Tilemap = "Tilemap";
+    static string enemyHead = "enemyHead";
+    static string chest = "chest";
 
     //フレーム毎の処理====================================================================================================
 
@@ -131,7 +132,7 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         //Tilemapに衝突したとき宝箱に乗ったときに、ダメージを解除する
-        if (collision.gameObject.name.Equals(Tilemap) || collision.gameObject.tag.Equals("chest"))
+        if (collision.gameObject.name.Equals(Tilemap) || collision.gameObject.tag.Equals(chest))
         {
             isHurting = false;
         }
@@ -316,7 +317,7 @@ public class PlayerController : MonoBehaviour
                 //Tilemapを検知したら接地
                 if (groundCollider.gameObject.name.Equals(Tilemap)) isGrounded = true;
                 //宝箱を検知したら接地
-                if (groundCollider.gameObject.tag.Equals("chest")) isGrounded = true;
+                if (groundCollider.gameObject.tag.Equals(chest)) isGrounded = true;
             }
         }
     }
