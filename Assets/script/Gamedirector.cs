@@ -31,6 +31,7 @@ public class Gamedirector : MonoBehaviour
         HPs = GetChildren("Canvas/Panel/HPs");
         Stars = GetChildren("Canvas/Panel/stars");
 
+
         //HPをHPMaxの数だけ表示
         for (int i = 1; i < HPs.Length - 1; i++)
         {
