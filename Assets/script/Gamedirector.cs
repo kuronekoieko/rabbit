@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class Gamedirector : MonoBehaviour
 {
 
-
-    static int starCount;
+    public static int starCount;
     static int HP;
 
     static int starCountMax = 7;

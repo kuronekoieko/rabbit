@@ -23,7 +23,8 @@ public class GoalController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-
+        Debug.Log(Gamedirector.starCount);
+        if (Gamedirector.starCount < 7) return;
         if (isCleard) return;
 
         //衝突を検知したのが"playerLR"ならprayerに攻撃
