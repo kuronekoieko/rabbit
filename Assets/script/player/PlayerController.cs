@@ -73,8 +73,41 @@ public class PlayerController : MonoBehaviour
         //落ちたら戻る
         if (transform.position.y < -50) Gamedirector.PlayerDead();
 
-        //スピード制限
-        //SpeedLimitter();
+
+        //キーボード入力
+        if (isLaddering)
+        {
+            keyX = 0;
+            keyY = 0;
+            //はしごを登ってるとき
+            if (Input.GetKey(KeyCode.RightArrow)) keyX = 1;
+            if (Input.GetKey(KeyCode.LeftArrow)) keyX = -1;
+            if (Input.GetKey(KeyCode.UpArrow)) keyY = 1;
+            if (Input.GetKey(KeyCode.DownArrow)) keyY = -1;
+
+            float x = keyX * ladderingSpeed;
+            float y = keyY * ladderingSpeed;
+
+            rigid2D.velocity = new Vector2(x,y);
+        }
+        else
+        {
+            //通常時
+            key = 0;
+            if (Input.GetKey(KeyCode.RightArrow)) key = 1;
+            if (Input.GetKey(KeyCode.LeftArrow)) key = -1;
+            Skip();
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                if (isGrounded && !isLaddering && rigid2D.velocity.x == 0)
+                {
+                    rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
+                }
+            }
+
+        }
+
     }
 
     //コライダが呼ばれたときの処理========================================================================================================
@@ -169,11 +202,10 @@ public class PlayerController : MonoBehaviour
             if (flickVector.y > 0) keyY = 1;
             if (flickVector.y < 0) keyY = -1;
 
-            sin = flickVector.y / flickVector.magnitude;
-
             float x = keyX * ladderingSpeed;
             float y = keyY * ladderingSpeed;
 
+            sin = flickVector.y / flickVector.magnitude;
             rigid2D.velocity = Mathf.Abs(sin) > 0.71f ? new Vector2(0, y) : new Vector2(x, 0);
         }
 
