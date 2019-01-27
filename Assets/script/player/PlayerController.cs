@@ -137,6 +137,7 @@ public class PlayerController : MonoBehaviour
         //キーボード入力
         if (isLaddering)
         {
+            animator.speed = keyX == 0 && keyY == 0 ? 0f : 1f;
             keyX = 0;
             keyY = 0;
             //はしごを登ってるとき
