@@ -23,7 +23,6 @@ public class GoalController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(Gamedirector.starCount);
         if (Gamedirector.starCount < 7) return;
         if (isCleard) return;
 
@@ -36,7 +35,6 @@ public class GoalController : MonoBehaviour
             StartCoroutine(DelayMethod(3.0f, () =>
             {
                 SceneManager.LoadScene("StartScene");
-
             }));
 
         }

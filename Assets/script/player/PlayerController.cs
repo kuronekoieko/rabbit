@@ -58,56 +58,14 @@ public class PlayerController : MonoBehaviour
         //アニメーションの切り替え
         SwhichAnimation();
 
-        //フリック時の動作
-        if (isLaddering)
-        {
-            //はしごを登ってるとき
-            FlickLaddering();
-        }
-        else
-        {
-            //通常時
-            if (!isHurting) Flick();
-        }
+        //スマホ用のコントローラー処理
+        //TabletController();
+
+        //PC用のコントローラー処理
+        KeyboadController();
 
         //落ちたら戻る
         if (transform.position.y < -50) Gamedirector.PlayerDead();
-
-
-        //キーボード入力
-        if (isLaddering)
-        {
-            keyX = 0;
-            keyY = 0;
-            //はしごを登ってるとき
-            if (Input.GetKey(KeyCode.RightArrow)) keyX = 1;
-            if (Input.GetKey(KeyCode.LeftArrow)) keyX = -1;
-            if (Input.GetKey(KeyCode.UpArrow)) keyY = 1;
-            if (Input.GetKey(KeyCode.DownArrow)) keyY = -1;
-
-            float x = keyX * ladderingSpeed;
-            float y = keyY * ladderingSpeed;
-
-            rigid2D.velocity = new Vector2(x,y);
-        }
-        else
-        {
-            //通常時
-            key = 0;
-            if (Input.GetKey(KeyCode.RightArrow)) key = 1;
-            if (Input.GetKey(KeyCode.LeftArrow)) key = -1;
-            Skip();
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                if (isGrounded && !isLaddering && rigid2D.velocity.x == 0)
-                {
-                    rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
-                }
-            }
-
-        }
-
     }
 
     //コライダが呼ばれたときの処理========================================================================================================
@@ -173,7 +131,60 @@ public class PlayerController : MonoBehaviour
 
     //普通のメソッド==============================================================================================================
 
-    public static void FlickLaddering()
+
+    static void KeyboadController()
+    {
+        //キーボード入力
+        if (isLaddering)
+        {
+            keyX = 0;
+            keyY = 0;
+            //はしごを登ってるとき
+            if (Input.GetKey(KeyCode.RightArrow)) keyX = 1;
+            if (Input.GetKey(KeyCode.LeftArrow)) keyX = -1;
+            if (Input.GetKey(KeyCode.UpArrow)) keyY = 1;
+            if (Input.GetKey(KeyCode.DownArrow)) keyY = -1;
+
+            float x = keyX * ladderingSpeed;
+            float y = keyY * ladderingSpeed;
+
+            rigid2D.velocity = new Vector2(x, y);
+        }
+        else
+        {
+            //通常時
+            key = 0;
+            if (Input.GetKey(KeyCode.RightArrow)) key = 1;
+            if (Input.GetKey(KeyCode.LeftArrow)) key = -1;
+            Skip();
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                if (isGrounded && !isLaddering && key == 0)
+                {
+                    rigid2D.velocity = new Vector2(rigid2D.velocity.x, jumpYForce);
+                }
+            }
+
+        }
+    }
+
+    static void TabletController()
+    {
+        //フリック時の動作
+        if (isLaddering)
+        {
+            //はしごを登ってるとき
+            FlickLaddering();
+        }
+        else
+        {
+            //通常時
+            if (!isHurting) Flick();
+        }
+    }
+
+    static void FlickLaddering()
     {
         animator.speed = keyX == 0 && keyY == 0 ? 0f : 1f;
 

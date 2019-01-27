@@ -8,6 +8,10 @@ public class CameraContoroller : MonoBehaviour
     public GameObject player;
     float camera_x;//カメラのx座標
     float camera_y;//カメラのy座標
+    float camera_x_min=0f;//カメラのx座標
+    float camera_y_min;//カメラのy座標
+    float camera_x_max= 92.0f-9.0f;//カメラのx座標
+    float camera_y_max=0f;//カメラのy座標
     float range_y = 2.0f;//プレイヤーをカメラに収める範囲
     float range_x = 1.5f;//プレイヤーをカメラに収める範囲
     Vector3 playerPos;
@@ -47,7 +51,7 @@ public class CameraContoroller : MonoBehaviour
         }
 
         //カメラの移動範囲制限
-        camera_x = Mathf.Clamp(camera_x, 0.0f, camera_x);
+        camera_x = Mathf.Clamp(camera_x, 0.0f, camera_x_max);
         camera_y = Mathf.Clamp(camera_y, camera_y, 0.0f);
 
         //移動処理

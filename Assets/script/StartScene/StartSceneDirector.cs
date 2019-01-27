@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartSceneDirector : MonoBehaviour {
+public class StartSceneDirector : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    // Use this for initialization
+    void Start()
     {
-        if (Input.GetMouseButtonDown(0)) {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            //SceneManager.LoadScene("TestStage");
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
             SceneManager.LoadScene("TestStage");
         }
     }
