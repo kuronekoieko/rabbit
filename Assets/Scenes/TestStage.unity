@@ -4848,6 +4848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b9aaa599b539442bbe1646bc845374d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clearTextObj: {fileID: 1303421160}
 --- !u!1 &833526784
 GameObject:
   m_ObjectHideFlags: 0
@@ -8079,7 +8080,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1303421160}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -8093,7 +8094,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 42a655fe634bd4f46bf724f4ee3904a9, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
