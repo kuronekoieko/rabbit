@@ -5,7 +5,6 @@ using UnityEngine;
 public class StarContoroller : MonoBehaviour
 {
 
-    GameObject mGo;
 
     // Use this for initialization
     void Start()
@@ -20,22 +19,12 @@ public class StarContoroller : MonoBehaviour
 
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag.Equals("Player"))
+        if (collision.gameObject.name.Equals("itemCheck"))
         {
-            if (!mGo) return;
-            if (mGo == gameObject) {
-                Gamedirector.StarCounter();
-                Destroy(gameObject);
-            }
-
+            Gamedirector.StarCounter();
+            Destroy(gameObject);
         }
-    }
-
-   public void SetGameObject(GameObject go)
-    {
-        mGo = go;
-
     }
 }

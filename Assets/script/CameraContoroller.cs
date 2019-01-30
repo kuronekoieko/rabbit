@@ -5,36 +5,56 @@ using UnityEngine;
 public class CameraContoroller : MonoBehaviour
 {
 
-    GameObject player;
-    Rigidbody2D rigid2D;
-    float x;
-    float y1;//１フレーム前のy座標
-    float y2;//現在のy座標
-    float delta_y = 0.1f;
+    public GameObject player;
+    float camera_x;//カメラのx座標
+    float camera_y;//カメラのy座標
+    float camera_x_min=0f;//カメラのx座標
+    float camera_y_min;//カメラのy座標
+    float camera_x_max= 92.0f-9.0f;//カメラのx座標
+    float camera_y_max=0f;//カメラのy座標
+    float range_y = 2.0f;//プレイヤーをカメラに収める範囲
+    float range_x = 1.5f;//プレイヤーをカメラに収める範囲
     Vector3 playerPos;
 
 
     void Start()
     {
-        player = GameObject.Find("player");
-        rigid2D = player.GetComponent<Rigidbody2D>();
-        playerPos = player.transform.position;
-        y1 = playerPos.y;
     }
 
     void Update()
     {
+        //プレイヤーの座標を取得
         playerPos = player.transform.position;
-        x = playerPos.x;
-        y2 = playerPos.y + 1.0f;
 
-        //前のフレームとのy座標の差がごくわずかならば、カメラ移動しない
-        if (Mathf.Abs(y2 - y1) < delta_y && PlayerController.isGrounded) y2 = y1;
+        //カメラの座標を設定
+        camera_x = transform.position.x;
+        camera_y = transform.position.y;
 
-        x = Mathf.Clamp(x, 0.0f, x);
-        y2 = Mathf.Clamp(y2, y2, 0.0f);
-        transform.position = new Vector3(x, y2, transform.position.z);
+        //キャラが内枠を出たときに、カメラのx座標を移動する
+        if (playerPos.x - camera_x > range_x)
+        {
+            camera_x = playerPos.x - range_x;
+        }
+        else if (playerPos.x - camera_x < -range_x)
+        {
+            camera_x = playerPos.x + range_x;
+        }
 
-        y1 = y2;
+        //キャラが内枠を出たときに、カメラのy座標を移動する
+        if (playerPos.y - camera_y > range_y)
+        {
+            camera_y = playerPos.y - range_y;
+        }
+        else if (playerPos.y - camera_y < -range_y)
+        {
+            camera_y = playerPos.y + range_y;
+        }
+
+        //カメラの移動範囲制限
+        camera_x = Mathf.Clamp(camera_x, 0.0f, camera_x_max);
+        camera_y = Mathf.Clamp(camera_y, camera_y, 0.0f);
+
+        //移動処理
+        transform.position = new Vector3(camera_x, camera_y, transform.position.z);
     }
 }

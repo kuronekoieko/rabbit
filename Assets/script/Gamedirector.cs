@@ -7,14 +7,13 @@ using UnityEngine.UI;
 public class Gamedirector : MonoBehaviour
 {
 
-
-    static int starCount;
+    public static int starCount;
     static int HP;
 
     static int starCountMax = 7;
     static int starCountMin = 0;
 
-    static int HPMax = 7;
+    static int HPMax = 3;
     static int HPMin = 0;
 
     static GameObject[] HPs;
@@ -28,8 +27,19 @@ public class Gamedirector : MonoBehaviour
     {
         InitializeStatus();
 
-        HPs = GetChildren("Canvas/HPs");
-        Stars = GetChildren("Canvas/stars");
+        HPs = GetChildren("Canvas/Panel/HPs");
+        Stars = GetChildren("Canvas/Panel/stars");
+
+
+        //HPをHPMaxの数だけ表示
+        for (int i = 1; i < HPs.Length - 1; i++)
+        {
+            if (!HPs[i]) return;
+            HPs[i].GetComponent<Image>().enabled = false;
+            if (i > HPMax) continue;
+            HPs[i].GetComponent<Image>().enabled = true;
+        }
+
 
     }
 
